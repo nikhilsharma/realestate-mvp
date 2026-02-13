@@ -9,11 +9,8 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "devkey")
 
 # Database Path (Render persistent disk support)
-if os.environ.get("RENDER"):
-    DATABASE = "/data/database.db"
-else:
-    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-    DATABASE = os.path.join(BASE_DIR, "database.db")
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+DATABASE = os.path.join(BASE_DIR, "database.db")
 
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "12345")
