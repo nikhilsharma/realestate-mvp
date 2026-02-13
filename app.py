@@ -1,32 +1,24 @@
 from flask import Flask, render_template, request, redirect, session
-import sqlite3
-from datetime import datetime
+import psycopg2
 import os
+from datetime import datetime
 
 app = Flask(__name__)
-
-# Secret Key from environment
 app.secret_key = os.environ.get("SECRET_KEY", "devkey")
 
-# Database Path (Render persistent disk support)
-BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-DATABASE = os.path.join(BASE_DIR, "database.db")
-
-ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "12345")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
 def get_db_connection():
-    conn = sqlite3.connect(DATABASE)
-    conn.row_factory = sqlite3.Row
+    conn = psycopg2.connect(DATABASE_URL)
     return conn
 
 def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute('''
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS properties (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             type TEXT,
             mode TEXT,
             location TEXT,
@@ -37,25 +29,29 @@ def init_db():
             status TEXT,
             created_at TIMESTAMP
         )
-    ''')
+    """)
 
-    cursor.execute('''
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS clients (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             name TEXT,
             contact TEXT,
             requirement TEXT,
             property_type TEXT,
             location TEXT,
             budget INTEGER,
-            followup_date TEXT,
+            followup_date DATE,
             status TEXT,
             created_at TIMESTAMP
         )
-    ''')
+    """)
 
     conn.commit()
+    cursor.close()
     conn.close()
+
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "admin")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "12345")
 
 @app.route("/")
 def dashboard():
@@ -63,13 +59,20 @@ def dashboard():
         return redirect("/login")
 
     conn = get_db_connection()
-    properties = conn.execute("SELECT COUNT(*) as count FROM properties").fetchone()
-    clients = conn.execute("SELECT COUNT(*) as count FROM clients").fetchone()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT COUNT(*) FROM properties")
+    property_count = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM clients")
+    client_count = cursor.fetchone()[0]
+
+    cursor.close()
     conn.close()
 
     return render_template("dashboard.html",
-                           property_count=properties["count"],
-                           client_count=clients["count"])
+                           property_count=property_count,
+                           client_count=client_count)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -94,6 +97,7 @@ def logout():
 def health():
     return {"status": "alive"}
 
+# Initialize DB when app starts
 init_db()
 
 if __name__ == "__main__":
