@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, session
 from config import Config
 from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property
-from app.models.client_model import create_client, get_all_clients
+from app.models.client_model import create_client, get_all_clients, get_followups_today
 from app.utils import parse_client_form, parse_property_form
 
 def register_routes(app):
@@ -14,11 +14,14 @@ def register_routes(app):
         mode = request.args.get("mode")
         
         properties = get_properties(search=search, mode=mode)
+        followups = get_followups_today()
+
         return render_template(
             "dashboard.html", 
             properties=properties,
             search=search,
             mode=mode,
+            followups=followups,
         )
 
     @app.route("/add-property", methods=["GET", "POST"])

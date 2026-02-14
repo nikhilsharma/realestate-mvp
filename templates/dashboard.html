@@ -4,6 +4,32 @@
 
 {% block content %}
 
+{% if followups %}
+<div class="card border-warning mb-4 shadow-sm">
+    <div class="card-body">
+        <h5 class="text-warning mb-3">
+            📅 Follow-ups Due Today ({{ followups|length }})
+        </h5>
+
+        {% for client in followups %}
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div>
+                    <strong>{{ client.name }}</strong><br>
+                    <small class="text-muted">
+                        {{ client.next_action }}
+                    </small>
+                </div>
+
+                <a href="/clients" class="btn btn-sm btn-outline-warning">
+                    View
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h4 class="mb-0">Properties</h4>
     <a href="/add-property" class="btn btn-dark btn-sm">+ Add</a>
