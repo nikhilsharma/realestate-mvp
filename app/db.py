@@ -1,9 +1,17 @@
 import psycopg2
+import time
 from config import Config
 
-def get_db_connection():
-    return psycopg2.connect(Config.DATABASE_URL)
-
+def get_db_connection(retries=3, delay=2):
+    for attempt in range(retries):
+        try:
+            return psycopg2.connect(Config.DATABASE_URL)
+        except psycopg2.OperationalError as e:
+            if attempt < retries - 1:
+                time.sleep(delay)
+            else:
+                raise e
+            
 def init_db():
     conn = get_db_connection()
     cursor = conn.cursor()
