@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, session
 from config import Config
-from app.models.property_model import create_property, get_properties
+from app.models.property_model import create_property, get_properties, toggle_property_status
 
 def register_routes(app):
 
@@ -11,9 +11,6 @@ def register_routes(app):
         search = request.args.get("search")
         mode = request.args.get("mode")
         
-        print("SEARCH:", search)
-        print("MODE:", mode)
-
         properties = get_properties(search=search, mode=mode)
         return render_template(
             "dashboard.html", 
@@ -62,3 +59,11 @@ def register_routes(app):
     @app.route("/health")
     def health():
         return {"status": "alive"}
+    
+    @app.route("/toggle-status/<int:property_id>", methods=["POST"])
+    def toggle_status(property_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        toggle_property_status(property_id)
+        return redirect("/")

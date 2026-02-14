@@ -74,6 +74,17 @@
                             Added {{ property[9] }}
                         </small>
                     </div>
+                    <form method="POST" action="/toggle-status/{{ property[0] }}">
+                        {% if property[8] == "Available" %}
+                            <button class="btn btn-sm btn-outline-danger">
+                                Mark Closed
+                            </button>
+                        {% else %}
+                            <button class="btn btn-sm btn-outline-success">
+                                Reopen
+                            </button>
+                        {% endif %}
+                    </form>
                 </div>
             </div>
         </div>

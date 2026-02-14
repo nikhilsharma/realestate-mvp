@@ -48,3 +48,20 @@ def get_properties(search=None, mode=None):
     conn.close()
 
     return results
+
+def toggle_property_status(property_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE properties
+        SET status = CASE
+            WHEN status = 'Available' THEN 'Closed'
+            ELSE 'Available'
+        END
+        WHERE id = %s
+    """, (property_id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
