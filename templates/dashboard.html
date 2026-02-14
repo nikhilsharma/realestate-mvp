@@ -1,13 +1,51 @@
-<h2>Dashboard</h2>
-<a href="/add-property">Add Property</a>
+{% extends "base.html" %}
 
-<hr>
+{% block title %}Dashboard{% endblock %}
 
-{% for property in properties %}
-    <p>
-        {{ property[1] }} |
-        {{ property[2] }} |
-        {{ property[3] }} |
-        ₹{{ property[4] }}
-    </p>
-{% endfor %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Properties</h4>
+    <a href="/add-property" class="btn btn-dark btn-sm">+ Add</a>
+</div>
+
+{% if properties %}
+    <div class="row">
+        {% for property in properties %}
+        <div class="col-12 col-md-6 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-1">
+                        {{ property[1] }} - {{ property[2] }}
+                    </h6>
+
+                    <div class="text-muted small mb-2">
+                        📍 {{ property[3] }}
+                    </div>
+
+                    <div class="fw-semibold">
+                        ₹ {{ property[4] }}
+                    </div>
+
+                    <div class="small text-muted">
+                        {{ property[5] }} sq ft
+                    </div>
+
+                    <hr>
+
+                    <div class="small">
+                        Owner: {{ property[6] }} <br>
+                        📞 {{ property[7] }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="text-center text-muted mt-5">
+        No properties yet.
+    </div>
+{% endif %}
+
+{% endblock %}

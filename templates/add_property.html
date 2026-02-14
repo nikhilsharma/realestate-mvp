@@ -1,23 +1,66 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Property</title>
-</head>
-<body>
-    <h2>Add Property</h2>
+{% extends "base.html" %}
 
-    <form method="POST">
-        <input name="type" placeholder="Residential / Commercial"><br><br>
-        <input name="mode" placeholder="Rent / Sale"><br><br>
-        <input name="location" placeholder="Location"><br><br>
-        <input name="budget" type="number" placeholder="Budget"><br><br>
-        <input name="area" type="number" placeholder="Area"><br><br>
-        <input name="owner_name" placeholder="Owner Name"><br><br>
-        <input name="owner_contact" placeholder="Owner Contact"><br><br>
-        <button type="submit">Save</button>
-    </form>
+{% block title %}Add Property{% endblock %}
 
-    <br>
-    <a href="/">Back</a>
-</body>
-</html>
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="mb-3">Add Property</h4>
+
+                <form method="POST">
+
+                    <div class="mb-3">
+                        <label class="form-label">Property Type</label>
+                        <select name="type" class="form-select" required>
+                            <option value="">Select</option>
+                            <option>Residential</option>
+                            <option>Commercial</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Mode</label>
+                        <select name="mode" class="form-select" required>
+                            <option value="">Select</option>
+                            <option>Rent</option>
+                            <option>Sale</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input name="location" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Budget</label>
+                        <input type="number" name="budget" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Area (sq ft)</label>
+                        <input type="number" name="area" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Owner Name</label>
+                        <input name="owner_name" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Owner Contact</label>
+                        <input name="owner_contact" class="form-control">
+                    </div>
+
+                    <button class="btn btn-dark w-100">Save Property</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
