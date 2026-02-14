@@ -107,6 +107,21 @@
 
                         <div class="d-flex gap-2">
 
+                            {% if property.video_link %}
+                            <a target="_blank"
+                                href="https://wa.me/?text={{ (
+                                'Urban Bricks & Bonds\n\n' ~
+                                property.type ~ ' - ' ~ property.mode ~ '\n' ~
+                                'Location: ' ~ property.location ~ '\n' ~
+                                'Budget: ₹ ' ~ property.budget ~ '\n' ~
+                                'Area: ' ~ property.area ~ ' sq ft\n\n' ~
+                                'Video: ' ~ property.video_link
+                                ) | urlencode }}"
+                                class="btn btn-sm btn-success">
+                                Share
+                            </a>
+                            {% endif %}
+
                             <a href="/edit-property/{{ property.id }}" 
                             class="btn btn-sm btn-outline-dark">
                                 Edit

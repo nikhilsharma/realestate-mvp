@@ -30,16 +30,7 @@ def register_routes(app):
             return redirect("/login")
 
         if request.method == "POST":
-            data = {
-                "type": request.form["type"],
-                "mode": request.form["mode"],
-                "location": request.form["location"],
-                "budget": int(request.form["budget"]),
-                "area": int(request.form["area"]),
-                "owner_name": request.form["owner_name"],
-                "owner_contact": request.form["owner_contact"]
-            }
-
+            data = parse_property_form(request.form)
             create_property(data)
             return redirect("/")
 

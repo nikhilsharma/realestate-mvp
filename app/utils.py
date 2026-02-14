@@ -6,7 +6,8 @@ def parse_property_form(form):
         "budget": int(form.get("budget", 0)),
         "area": int(form.get("area", 0)),
         "owner_name": form.get("owner_name"),
-        "owner_contact": form.get("owner_contact")
+        "owner_contact": form.get("owner_contact"),
+        "video_link": form.get("video_link") or None
     }
 
 def parse_client_form(form):
