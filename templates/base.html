@@ -13,7 +13,9 @@
 <body class="bg-light">
 
 <nav class="navbar navbar-dark bg-dark px-3">
-    <span class="navbar-brand mb-0 h5">🏢 Urban Bricks & Bonds</span>
+    <a class="navbar-brand fw-semibold" href="/">
+        🏢 Urban Bricks & Bonds
+    </a>
     {% if session.get("logged_in") %}
         <a href="/" class="btn btn-sm btn-outline-light me-2">Properties</a>
         <a href="/clients" class="btn btn-sm btn-outline-light me-2">Clients</a>
