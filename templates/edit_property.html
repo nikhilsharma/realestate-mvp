@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Edit Property{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="mb-3">Edit Property</h4>
+
+                <form method="POST">
+
+                    <select name="type" class="form-select mb-2" required>
+                        <option value="Residential" {% if property.type == "Residential" %}selected{% endif %}>Residential</option>
+                        <option value="Commercial" {% if property.type == "Commercial" %}selected{% endif %}>Commercial</option>
+                    </select>
+
+                    <select name="mode" class="form-select mb-2" required>
+                        <option value="Rent" {% if property.mode == "Rent" %}selected{% endif %}>Rent</option>
+                        <option value="Sale" {% if property.mode == "Sale" %}selected{% endif %}>Sale</option>
+                    </select>
+
+                    <input name="location" class="form-control mb-2" value="{{ property.location }}" required>
+
+                    <input type="number" name="budget" class="form-control mb-2" value="{{ property.budget }}">
+
+                    <input type="number" name="area" class="form-control mb-2" value="{{ property.area }}">
+
+                    <input name="owner_name" class="form-control mb-2" value="{{ property.owner_name }}">
+
+                    <input name="owner_contact" class="form-control mb-3" value="{{ property.owner_contact }}">
+
+                    <button class="btn btn-dark w-100">Update Property</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

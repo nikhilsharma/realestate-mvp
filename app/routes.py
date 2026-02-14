@@ -1,8 +1,8 @@
 from flask import render_template, request, redirect, session
 from config import Config
-from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties
+from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property
 from app.models.client_model import create_client, get_all_clients
-from app.utils import parse_client_form
+from app.utils import parse_client_form, parse_property_form
 
 def register_routes(app):
 
@@ -110,4 +110,21 @@ def register_routes(app):
             client=client,
             properties=properties
         )
+
+    @app.route("/edit-property/<int:property_id>", methods=["GET", "POST"])
+    def edit_property(property_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        property = get_property_by_id(property_id)
+
+        if not property:
+            return "Property not found"
+
+        if request.method == "POST":
+            data = parse_property_form(request.form)
+            update_property(property_id, data)
+            return redirect("/")
+
+        return render_template("edit_property.html", property=property)
 

@@ -39,16 +39,17 @@
         <div class="col-12 col-md-6 mb-3">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h6 class="fw-bold mb-1">
-                        {{ property.type }} - {{ property.mode }}
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="fw-bold mb-1">
+                            {{ property.type }} - {{ property.mode }}
 
-                        {% if property.status == "Available" %}
-                            <span class="badge bg-success">Available</span>
-                        {% else %}
-                            <span class="badge bg-secondary">Closed</span>
-                        {% endif %}
-                    </h6>
-
+                            {% if property.status == "Available" %}
+                                <span class="badge bg-success">Available</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Closed</span>
+                            {% endif %}
+                        </h6>
+                    </div>
                     <div class="text-muted small mb-2">
                         📍 {{ property.location }}
                     </div>
@@ -69,22 +70,37 @@
                             📞 {{ property.owner_contact }}
                         </a>
                     </div>
-                    <div class="mt-2 text-end">
+                    
+                    <hr>
+
+                    <div class="d-flex justify-content-between align-items-center">
+
                         <small class="text-muted">
-                            Added {{ property.created_at }}
+                            Added {{ property.created_at.strftime("%d-%m-%Y") if property.created_at }}
                         </small>
-                    </div>
-                    <form method="POST" action="/toggle-status/{{ property.id }}">
-                        {% if property.status == "Available" %}
-                            <button class="btn btn-sm btn-outline-danger">
-                                Mark Closed
-                            </button>
-                        {% else %}
-                            <button class="btn btn-sm btn-outline-success">
-                                Reopen
-                            </button>
-                        {% endif %}
-                    </form>
+
+                        <div class="d-flex gap-2">
+
+                            <a href="/edit-property/{{ property.id }}" 
+                            class="btn btn-sm btn-outline-dark">
+                                Edit
+                            </a>
+
+                            <form method="POST" action="/toggle-status/{{ property.id }}">
+                                {% if property.status == "Available" %}
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        Close
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-sm btn-outline-success">
+                                        Reopen
+                                    </button>
+                                {% endif %}
+                            </form>
+    </div>
+</div>
+
+
                 </div>
             </div>
         </div>

@@ -108,3 +108,52 @@ def get_matching_properties(client):
     conn.close()
 
     return results
+
+def get_property_by_id(property_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM properties WHERE id = %s", (property_id,))
+    row = cursor.fetchone()
+
+    if not row:
+        cursor.close()
+        conn.close()
+        return None
+
+    columns = [desc[0] for desc in cursor.description]
+    result = dict(zip(columns, row))
+
+    cursor.close()
+    conn.close()
+
+    return result
+
+def update_property(property_id, data):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE properties
+        SET type=%s,
+            mode=%s,
+            location=%s,
+            budget=%s,
+            area=%s,
+            owner_name=%s,
+            owner_contact=%s
+        WHERE id=%s
+    """, (
+        data["type"],
+        data["mode"],
+        data["location"],
+        data["budget"],
+        data["area"],
+        data["owner_name"],
+        data["owner_contact"],
+        property_id
+    ))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
