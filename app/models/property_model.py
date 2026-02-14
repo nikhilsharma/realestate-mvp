@@ -42,7 +42,13 @@ def get_properties(search=None, mode=None):
     query += " ORDER BY created_at DESC"
 
     cursor.execute(query, tuple(params))
-    results = cursor.fetchall()
+
+    rows = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+
+    results = []
+    for row in rows:
+        results.append(dict(zip(columns, row)))
 
     cursor.close()
     conn.close()

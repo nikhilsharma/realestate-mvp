@@ -12,34 +12,34 @@
 <div class="card mb-3 shadow-sm">
     <div class="card-body">
 
-        <h6 class="fw-bold">{{ client[1] }}</h6>
+        <h6 class="fw-bold">{{ client.name }}</h6>
 
         <div class="small text-muted">
-            📞 {{ client[2] }}
+            📞 {{ client.contact }}
         </div>
 
         <div class="mt-2">
-            {{ client[3] }} | {{ client[4] }}
+            {{ client.requirement }} | {{ client.property_type }}
         </div>
 
         <div class="small">
-            📍 {{ client[5] }}
+            📍 {{ client.location }}
         </div>
 
         <div class="fw-semibold">
-            ₹ {{ client[6] }}
+            ₹ {{ client.budget }}
         </div>
 
         <div class="small text-muted">
-            Follow-up: {{ client[7].strftime("%d-%m-%Y") if client[7] }}
+            Follow-up: {{ client.followup_date.strftime("%d-%m-%Y") if client.followup_date }}
         </div>
 
         <div class="mt-2 small">
-            <strong>Next:</strong> {{ client[11] }}
+            <strong>Next:</strong> {{ client.next_action }}
         </div>
 
         <div class="small text-muted mt-1">
-            {{ client[10] }}
+            {{ client.notes }}
         </div>
     </div>
 </div>

@@ -40,9 +40,9 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <h6 class="fw-bold mb-1">
-                        {{ property[1] }} - {{ property[2] }}
+                        {{ property.type }} - {{ property.mode }}
 
-                        {% if property[8] == "Available" %}
+                        {% if property.status == "Available" %}
                             <span class="badge bg-success">Available</span>
                         {% else %}
                             <span class="badge bg-secondary">Closed</span>
@@ -50,32 +50,32 @@
                     </h6>
 
                     <div class="text-muted small mb-2">
-                        📍 {{ property[3] }}
+                        📍 {{ property.location }}
                     </div>
 
                     <div class="fw-semibold">
-                        ₹ {{ property[4] }}
+                        ₹ {{ property.budget }}
                     </div>
 
                     <div class="small text-muted">
-                        {{ property[5] }} sq ft
+                        {{ property.area }} sq ft
                     </div>
 
                     <hr>
 
                     <div class="small">
-                        Owner: {{ property[6] }} <br>
-                        <a href="tel:{{ property[7] }}" class="text-decoration-none">
-                            📞 {{ property[7] }}
+                        Owner: {{ property.owner_name }} <br>
+                        <a href="tel:{{ property.owner_contact }}" class="text-decoration-none">
+                            📞 {{ property.owner_contact }}
                         </a>
                     </div>
                     <div class="mt-2 text-end">
                         <small class="text-muted">
-                            Added {{ property[9] }}
+                            Added {{ property.created_at }}
                         </small>
                     </div>
-                    <form method="POST" action="/toggle-status/{{ property[0] }}">
-                        {% if property[8] == "Available" %}
+                    <form method="POST" action="/toggle-status/{{ property.id }}">
+                        {% if property.status == "Available" %}
                             <button class="btn btn-sm btn-outline-danger">
                                 Mark Closed
                             </button>
