@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Matches{% endblock %}
+
+{% block content %}
+
+<h4 class="mb-3">
+    Matching Properties for {{ client.name }}
+</h4>
+
+{% if properties %}
+    {% for property in properties %}
+        <div class="card mb-3 shadow-sm">
+            <div class="card-body">
+
+                <h6>
+                    {{ property.type }} - {{ property.mode }}
+                </h6>
+
+                <div class="small text-muted">
+                    📍 {{ property.location }}
+                </div>
+
+                <div class="fw-semibold">
+                    ₹ {{ property.budget }}
+                </div>
+
+                <div class="small">
+                    {{ property.area }} sq ft
+                </div>
+
+                <div class="mt-2">
+                    Owner: {{ property.owner_name }} <br>
+                    <a href="tel:{{ property.owner_contact }}">
+                        📞 {{ property.owner_contact }}
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="text-muted">
+        No matching properties found.
+    </div>
+{% endif %}
+
+{% endblock %}

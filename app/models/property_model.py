@@ -71,3 +71,40 @@ def toggle_property_status(property_id):
     conn.commit()
     cursor.close()
     conn.close()
+
+def get_matching_properties(client):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT * FROM properties
+        WHERE mode = %s
+        AND type = %s
+    """
+
+    params = [client["requirement"], client["property_type"]]
+
+    # Location filter
+    if client["location"]:
+        query += " AND location ILIKE %s"
+        params.append(f"%{client['location']}%")
+
+    # Budget filter (±10%)
+    if client["budget"]:
+        lower = int(client["budget"] * 0.9)
+        upper = int(client["budget"] * 1.1)
+        query += " AND budget BETWEEN %s AND %s"
+        params.extend([lower, upper])
+
+    query += " ORDER BY created_at DESC"
+
+    cursor.execute(query, tuple(params))
+    rows = cursor.fetchall()
+
+    columns = [desc[0] for desc in cursor.description]
+    results = [dict(zip(columns, row)) for row in rows]
+
+    cursor.close()
+    conn.close()
+
+    return results

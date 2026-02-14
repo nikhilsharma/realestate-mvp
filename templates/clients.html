@@ -41,6 +41,13 @@
         <div class="small text-muted mt-1">
             {{ client.notes }}
         </div>
+
+        <div class="mt-2 text-end">
+            <a href="/client/{{ client.id }}/matches" class="btn btn-sm btn-outline-dark">
+                Show Matches
+            </a>
+        </div>
+
     </div>
 </div>
 {% endfor %}

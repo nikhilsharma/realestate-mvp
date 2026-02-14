@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, session
 from config import Config
-from app.models.property_model import create_property, get_properties, toggle_property_status
+from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties
 from app.models.client_model import create_client, get_all_clients
 from app.utils import parse_client_form
 
@@ -90,4 +90,24 @@ def register_routes(app):
         
         return render_template("add_client.html")
 
+    @app.route("/client/<int:client_id>/matches")
+    def client_matches(client_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        from app.models.client_model import get_all_clients
+
+        clients = get_all_clients()
+        client = next((c for c in clients if c["id"] == client_id), None)
+
+        if not client:
+            return "Client not found"
+
+        properties = get_matching_properties(client)
+
+        return render_template(
+            "client_matches.html",
+            client=client,
+            properties=properties
+        )
 
