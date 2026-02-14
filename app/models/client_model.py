@@ -6,8 +6,8 @@ def create_client(data):
 
     cursor.execute("""
         INSERT INTO clients
-        (name, contact, requirement, property_type, location, budget, followup_date, status)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        (name, contact, requirement, property_type, location, budget, followup_date, status, notes, next_action)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """, (
         data["name"],
         data["contact"],
@@ -16,7 +16,9 @@ def create_client(data):
         data["location"],
         data["budget"],
         data["followup_date"],
-        "Active"
+        "Active",
+        data["notes"],
+        data["next_action"]
     ))
 
     conn.commit()

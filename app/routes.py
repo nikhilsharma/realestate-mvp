@@ -90,7 +90,9 @@ def register_routes(app):
                 "property_type": request.form["property_type"],
                 "location": request.form["location"],
                 "budget": int(request.form["budget"]),
-                "followup_date": request.form["followup_date"]
+                "followup_date": request.form["followup_date"],
+                "notes": request.form["notes"],
+                "next_action": request.form["next_action"]
             }
 
             create_client(data)

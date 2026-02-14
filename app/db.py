@@ -46,6 +46,15 @@ def init_db():
         )
     """)
 
+    cursor.execute("""
+        ALTER TABLE clients
+        ADD COLUMN IF NOT EXISTS notes TEXT
+    """)
+
+    cursor.execute("""
+        ALTER TABLE clients
+        ADD COLUMN IF NOT EXISTS next_action TEXT
+    """)
 
     conn.commit()
     cursor.close()
