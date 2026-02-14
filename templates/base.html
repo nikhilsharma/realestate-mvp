@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Real Estate MVP{% endblock %}</title>
+    <title>{% block title %}Urban Bricks & Bonds{% endblock %}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -13,13 +13,15 @@
 <body class="bg-light">
 
 <nav class="navbar navbar-dark bg-dark px-3">
-    <span class="navbar-brand mb-0 h5">🏢 Real Estate</span>
+    <span class="navbar-brand mb-0 h5">🏢 Urban Bricks & Bonds</span>
     {% if session.get("logged_in") %}
         <a href="/" class="btn btn-sm btn-outline-light me-2">Properties</a>
         <a href="/clients" class="btn btn-sm btn-outline-light me-2">Clients</a>
         <a href="/logout" class="btn btn-sm btn-outline-light">Logout</a>
     {% endif %}
 </nav>
+
+<small class="text-light ms-2">Property Management</small>
 
 <div class="container py-4">
     {% block content %}{% endblock %}
