@@ -31,6 +31,22 @@ def init_db():
         )
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS clients (
+            id SERIAL PRIMARY KEY,
+            name TEXT,
+            contact TEXT,
+            requirement TEXT,
+            property_type TEXT,
+            location TEXT,
+            budget INTEGER,
+            followup_date DATE,
+            status TEXT DEFAULT 'Active',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+
     conn.commit()
     cursor.close()
     conn.close()

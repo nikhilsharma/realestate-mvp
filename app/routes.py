@@ -1,6 +1,7 @@
 from flask import render_template, request, redirect, session
 from config import Config
 from app.models.property_model import create_property, get_properties, toggle_property_status
+from app.models.client_model import create_client, get_all_clients
 
 def register_routes(app):
 
@@ -67,3 +68,34 @@ def register_routes(app):
 
         toggle_property_status(property_id)
         return redirect("/")
+    
+    @app.route("/clients")
+    def clients():
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        clients = get_all_clients()
+        return render_template("clients.html", clients=clients)
+
+    @app.route("/add-client", methods=["GET", "POST"])
+    def add_client():
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        if request.method == "POST":
+            data = {
+                "name": request.form["name"],
+                "contact": request.form["contact"],
+                "requirement": request.form["requirement"],
+                "property_type": request.form["property_type"],
+                "location": request.form["location"],
+                "budget": int(request.form["budget"]),
+                "followup_date": request.form["followup_date"]
+            }
+
+            create_client(data)
+            return redirect("/clients")
+
+        return render_template("add_client.html")
+
+

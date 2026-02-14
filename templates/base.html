@@ -15,6 +15,8 @@
 <nav class="navbar navbar-dark bg-dark px-3">
     <span class="navbar-brand mb-0 h5">🏢 Real Estate</span>
     {% if session.get("logged_in") %}
+        <a href="/" class="btn btn-sm btn-outline-light me-2">Properties</a>
+        <a href="/clients" class="btn btn-sm btn-outline-light me-2">Clients</a>
         <a href="/logout" class="btn btn-sm btn-outline-light">Logout</a>
     {% endif %}
 </nav>
