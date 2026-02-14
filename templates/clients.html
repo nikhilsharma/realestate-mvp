@@ -31,7 +31,7 @@
         </div>
 
         <div class="small text-muted">
-            Follow-up: {{ client[7] }}
+            Follow-up: {{ client[7].strftime("%d-%m-%Y") if client[7] }}
         </div>
 
         <div class="mt-2 small">
