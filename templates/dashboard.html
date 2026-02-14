@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Dashboard</title>
-</head>
-<body>
-    <h2>Dashboard</h2>
-    <p>Total Properties: {{ property_count }}</p>
-    <p>Total Clients: {{ client_count }}</p>
-    <br>
-    <a href="/logout">Logout</a>
-</body>
-</html>
+<h2>Dashboard</h2>
+<a href="/add-property">Add Property</a>
+
+<hr>
+
+{% for property in properties %}
+    <p>
+        {{ property[1] }} |
+        {{ property[2] }} |
+        {{ property[3] }} |
+        ₹{{ property[4] }}
+    </p>
+{% endfor %}
