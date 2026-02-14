@@ -9,6 +9,30 @@
     <a href="/add-property" class="btn btn-dark btn-sm">+ Add</a>
 </div>
 
+<form method="GET" class="row g-2 mb-3">
+
+    <div class="col-7">
+        <input type="text"
+               name="search"
+               class="form-control"
+               placeholder="Search location / owner"
+               value="{{ search or '' }}">
+    </div>
+
+    <div class="col-3">
+        <select name="mode" class="form-select">
+            <option value="">All</option>
+            <option value="Rent" {% if mode == "Rent" %}selected{% endif %}>Rent</option>
+            <option value="Sale" {% if mode == "Sale" %}selected{% endif %}>Sale</option>
+        </select>
+    </div>
+
+    <div class="col-2">
+        <button class="btn btn-dark w-100">Go</button>
+    </div>
+
+</form>
+
 {% if properties %}
     <div class="row">
         {% for property in properties %}
@@ -17,6 +41,12 @@
                 <div class="card-body">
                     <h6 class="fw-bold mb-1">
                         {{ property[1] }} - {{ property[2] }}
+
+                        {% if property[8] == "Available" %}
+                            <span class="badge bg-success">Available</span>
+                        {% else %}
+                            <span class="badge bg-secondary">Closed</span>
+                        {% endif %}
                     </h6>
 
                     <div class="text-muted small mb-2">
@@ -35,7 +65,14 @@
 
                     <div class="small">
                         Owner: {{ property[6] }} <br>
-                        📞 {{ property[7] }}
+                        <a href="tel:{{ property[7] }}" class="text-decoration-none">
+                            📞 {{ property[7] }}
+                        </a>
+                    </div>
+                    <div class="mt-2 text-end">
+                        <small class="text-muted">
+                            Added {{ property[9] }}
+                        </small>
                     </div>
                 </div>
             </div>

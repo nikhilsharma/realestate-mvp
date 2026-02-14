@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, session
 from config import Config
-from app.models.property_model import create_property, get_all_properties
+from app.models.property_model import create_property, get_properties
 
 def register_routes(app):
 
@@ -8,9 +8,19 @@ def register_routes(app):
     def dashboard():
         if not session.get("logged_in"):
             return redirect("/login")
+        search = request.args.get("search")
+        mode = request.args.get("mode")
+        
+        print("SEARCH:", search)
+        print("MODE:", mode)
 
-        properties = get_all_properties()
-        return render_template("dashboard.html", properties=properties)
+        properties = get_properties(search=search, mode=mode)
+        return render_template(
+            "dashboard.html", 
+            properties=properties,
+            search=search,
+            mode=mode,
+        )
 
     @app.route("/add-property", methods=["GET", "POST"])
     def add_property():
