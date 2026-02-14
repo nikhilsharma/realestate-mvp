@@ -15,7 +15,9 @@
         <h6 class="fw-bold">{{ client.name }}</h6>
 
         <div class="small text-muted">
-            📞 {{ client.contact }}
+            <a href="tel:{{ client.contact }}" class="text-decoration-none">
+                📞 {{ client.contact }}
+            </a>
         </div>
 
         <div class="mt-2">
@@ -42,11 +44,18 @@
             {{ client.notes }}
         </div>
 
-        <div class="mt-2 text-end">
-            <a href="/client/{{ client.id }}/matches" class="btn btn-sm btn-outline-dark">
+        <div class="mt-2 d-flex justify-content-end gap-2">
+            <a href="/client/{{ client.id }}/matches"
+            class="btn btn-sm btn-outline-primary">
                 Show Matches
             </a>
+
+            <a href="/edit-client/{{ client.id }}"
+            class="btn btn-sm btn-outline-dark">
+                Edit
+            </a>
         </div>
+
 
     </div>
 </div>

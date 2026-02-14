@@ -67,3 +67,56 @@ def get_followups_today():
     conn.close()
 
     return results
+
+def get_client_by_id(client_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM clients WHERE id = %s", (client_id,))
+    row = cursor.fetchone()
+
+    if not row:
+        cursor.close()
+        conn.close()
+        return None
+
+    columns = [desc[0] for desc in cursor.description]
+    result = dict(zip(columns, row))
+
+    cursor.close()
+    conn.close()
+
+    return result
+
+def update_client(client_id, data):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE clients
+        SET name=%s,
+            contact=%s,
+            requirement=%s,
+            property_type=%s,
+            location=%s,
+            budget=%s,
+            followup_date=%s,
+            notes=%s,
+            next_action=%s
+        WHERE id=%s
+    """, (
+        data["name"],
+        data["contact"],
+        data["requirement"],
+        data["property_type"],
+        data["location"],
+        data["budget"],
+        data["followup_date"],
+        data["notes"],
+        data["next_action"],
+        client_id
+    ))
+
+    conn.commit()
+    cursor.close()
+    conn.close()

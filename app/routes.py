@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, session
 from config import Config
 from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property
-from app.models.client_model import create_client, get_all_clients, get_followups_today
+from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client
 from app.utils import parse_client_form, parse_property_form
 
 def register_routes(app):
@@ -130,4 +130,22 @@ def register_routes(app):
             return redirect("/")
 
         return render_template("edit_property.html", property=property)
+    
+    @app.route("/edit-client/<int:client_id>", methods=["GET", "POST"])
+    def edit_client(client_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        client = get_client_by_id(client_id)
+
+        if not client:
+            return "Client not found"
+
+        if request.method == "POST":
+            data = parse_client_form(request.form)
+            update_client(client_id, data)
+            return redirect("/clients")
+
+        return render_template("edit_client.html", client=client)
+
 

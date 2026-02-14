@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Edit Client{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h4 class="mb-3">Edit Client</h4>
+
+                <form method="POST">
+
+                    <input name="name" class="form-control mb-2"
+                           value="{{ client.name }}" required>
+
+                    <input name="contact" class="form-control mb-2"
+                           value="{{ client.contact }}" required>
+
+                    <select name="requirement" class="form-select mb-2" required>
+                        <option value="Rent" {% if client.requirement == "Rent" %}selected{% endif %}>Rent</option>
+                        <option value="Sale" {% if client.requirement == "Sale" %}selected{% endif %}>Sale</option>
+                    </select>
+
+                    <select name="property_type" class="form-select mb-2" required>
+                        <option value="Residential" {% if client.property_type == "Residential" %}selected{% endif %}>Residential</option>
+                        <option value="Commercial" {% if client.property_type == "Commercial" %}selected{% endif %}>Commercial</option>
+                    </select>
+
+                    <input name="location" class="form-control mb-2"
+                           value="{{ client.location }}">
+
+                    <input type="number" name="budget" class="form-control mb-2"
+                           value="{{ client.budget }}">
+
+                    <input type="date" name="followup_date"
+                           class="form-control mb-2"
+                           value="{{ client.followup_date }}">
+
+                    <textarea name="notes" class="form-control mb-2">{{ client.notes }}</textarea>
+
+                    <input name="next_action" class="form-control mb-3"
+                           value="{{ client.next_action }}">
+
+                    <button class="btn btn-dark w-100">Update Client</button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
