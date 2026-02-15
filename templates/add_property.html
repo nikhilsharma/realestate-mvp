@@ -42,7 +42,13 @@
 
                     <div class="mb-3">
                         <label class="form-label">Area (sq ft)</label>
-                        <input type="number" name="area" class="form-control" required>
+                        <input type="number" name="area" id="area_sqft" class="form-control"
+                            value="{{ property.area if property else '' }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Area (sq gaj)</label>
+                        <input type="number" id="area_sqgaj" class="form-control">
                     </div>
 
                     <div class="mb-3">
