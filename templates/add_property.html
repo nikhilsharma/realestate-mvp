@@ -43,7 +43,7 @@
                     <div class="mb-3">
                         <label class="form-label">Area (sq ft)</label>
                         <input type="number" name="area" id="area_sqft" class="form-control"
-                            value="{{ property.area if property else '' }}">
+                            value="{{ property.area if property and property.area else '' }}">
                     </div>
                     
                     <div class="mb-3">
@@ -59,6 +59,19 @@
                     <div class="mb-3">
                         <label class="form-label">Owner Contact</label>
                         <input name="owner_contact" class="form-control">
+                    </div>
+
+                    <hr>
+                    <h6 class="mt-3">Dealer Details (Optional)</h6>
+
+                    <div class="mb-3">
+                        <label class="form-label">Dealer Name</label>
+                        <input type="text" name="dealer_name" class="form-control">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Dealer Contact</label>
+                        <input type="text" name="dealer_contact" class="form-control">
                     </div>
 
                     <div class="mb-3">

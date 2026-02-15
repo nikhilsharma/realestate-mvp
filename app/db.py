@@ -61,6 +61,16 @@ def init_db():
     ADD COLUMN IF NOT EXISTS video_link TEXT
     """)
 
+    cursor.execute("""
+    ALTER TABLE properties
+    ADD COLUMN IF NOT EXISTS dealer_name TEXT
+    """)
+
+    cursor.execute("""
+        ALTER TABLE properties
+        ADD COLUMN IF NOT EXISTS dealer_contact TEXT
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

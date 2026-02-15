@@ -97,6 +97,15 @@
                         </a>
                     </div>
                     
+                    {% if property.dealer_name %}
+                    <div class="mt-2 pt-2 border-top small text-muted">
+                        Dealer: {{ property.dealer_name }} <br>
+                        <a href="tel:{{ property.dealer_contact }}">
+                            📞 {{ property.dealer_contact }}
+                        </a>
+                    </div>
+                    {% endif %}
+                
                     <hr>
 
                     <div class="d-flex justify-content-between align-items-center">

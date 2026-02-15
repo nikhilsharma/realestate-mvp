@@ -6,8 +6,8 @@ def create_property(data):
 
     cursor.execute("""
         INSERT INTO properties
-        (type, mode, location, budget, area, owner_name, owner_contact, video_link)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+        (type, mode, location, budget, area, owner_name, owner_contact, dealer_name, dealer_contact, video_link)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """, (
         data["type"],
         data["mode"],
@@ -16,6 +16,8 @@ def create_property(data):
         data["area"],
         data["owner_name"],
         data["owner_contact"],
+        data.get("dealer_name"),
+        data.get("dealer_contact"),
         data["video_link"]
     ))
 
@@ -143,6 +145,8 @@ def update_property(property_id, data):
             area=%s,
             owner_name=%s,
             owner_contact=%s,
+            dealer_name=%s,
+            dealer_contact=%s,
             video_link=%s
         WHERE id=%s
     """, (
@@ -153,6 +157,8 @@ def update_property(property_id, data):
         data["area"],
         data["owner_name"],
         data["owner_contact"],
+        data.get("dealer_name"),
+        data.get("dealer_contact"),
         data["video_link"],
         property_id
     ))

@@ -7,7 +7,9 @@ def parse_property_form(form):
         "area": int(form.get("area", 0)),
         "owner_name": form.get("owner_name"),
         "owner_contact": form.get("owner_contact"),
-        "video_link": form.get("video_link") or None
+        "video_link": form.get("video_link") or None,
+        "dealer_name": form.get("dealer_name") or None,
+        "dealer_contact": form.get("dealer_contact") or None
     }
 
 def parse_client_form(form):
