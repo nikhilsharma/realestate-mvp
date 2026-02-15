@@ -7,33 +7,65 @@
     <div class="col-12 col-md-6">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h4 class="mb-3">Edit Property</h4>
+                <h4 class="mb-3">Edit Property Details</h4>
 
                 <form method="POST">
 
-                    <select name="type" class="form-select mb-2" required>
-                        <option value="Residential" {% if property.type == "Residential" %}selected{% endif %}>Residential</option>
-                        <option value="Commercial" {% if property.type == "Commercial" %}selected{% endif %}>Commercial</option>
-                    </select>
+                    <div class="mb-3">
+                        <label class="form-label">Property Type</label>
+                        <select name="type" class="form-select" required>
+                            <option value="Residential" {% if property.type == "Residential" %}selected{% endif %}>Residential</option>
+                            <option value="Commercial" {% if property.type == "Commercial" %}selected{% endif %}>Commercial</option>
+                        </select>    
+                    </div>
 
-                    <select name="mode" class="form-select mb-2" required>
-                        <option value="Rent" {% if property.mode == "Rent" %}selected{% endif %}>Rent</option>
-                        <option value="Sale" {% if property.mode == "Sale" %}selected{% endif %}>Sale</option>
-                    </select>
+                    <div class="mb-3">
+                        <label class="form-label">Mode</label>
+                        <select name="mode" class="form-select" required>
+                            <option value="Rent" {% if property.mode == "Rent" %}selected{% endif %}>Rent</option>
+                            <option value="Sale" {% if property.mode == "Sale" %}selected{% endif %}>Sale</option>
+                        </select>
+                    </div>
 
-                    <input name="location" class="form-control mb-2" value="{{ property.location }}" required>
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input name="location" class="form-control" value="{{ property.location }}" required>
+                    </div>
 
-                    <input type="number" name="budget" class="form-control mb-2" value="{{ property.budget }}">
+                    <div class="mb-3">
+                        <label class="form-label">Budget</label>
+                        <input type="number" name="budget" class="form-control" value="{{ property.budget }}" required>
+                    </div>
 
-                    <input type="number" name="area" class="form-control mb-2" value="{{ property.area }}">
+                    <div class="mb-3">
+                        <label class="form-label">Area (sq ft)</label>
+                        <input type="number" name="area" class="form-control" value="{{ property.area }}" required>
+                    </div>
 
-                    <input name="owner_name" class="form-control mb-2" value="{{ property.owner_name }}">
+                    <div class="mb-3">
+                        <label class="form-label">Owner Name</label>
+                        <input name="owner_name" class="form-control" value="{{ property.owner_name }}">
+                    </div>
 
-                    <input name="owner_contact" class="form-control mb-3" value="{{ property.owner_contact }}">
+                    <div class="mb-3">
+                        <label class="form-label">Owner Contact</label>
+                        <input name="owner_contact" class="form-control mb-3" value="{{ property.owner_contact }}">
+                    </div>
 
-                    <input type="url" name="video_link" class="form-control mb-2" value="{{ property.video_link }}" placeholder="Video Link">
+                    <div class="mb-3">
+                        <label class="form-label">Property Video Link</label>
+                        <input type="url" name="video_link" class="form-control" value="{{ property.video_link }}" placeholder="Video Link">
+                    </div>
 
-                    <button class="btn btn-dark w-100">Update Property</button>
+                    <div class="d-flex gap-2 mt-3">
+                        <button type="submit" class="btn btn-dark w-100">
+                            Update Property
+                        </button>
+
+                        <a href="/" class="btn btn-outline-secondary w-100">
+                            Cancel
+                        </a>
+                    </div>
 
                 </form>
 

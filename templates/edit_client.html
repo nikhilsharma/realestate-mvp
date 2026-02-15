@@ -7,42 +7,70 @@
     <div class="col-12 col-md-6">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h4 class="mb-3">Edit Client</h4>
+                <h4 class="mb-3">Edit Client Details</h4>
 
                 <form method="POST">
 
-                    <input name="name" class="form-control mb-2"
-                           value="{{ client.name }}" required>
+                    <div class="mb-3">
+                        <label class="form-label">Client Name</label>
+                        <input type="text" name="name" class="form-control" value="{{ client.name }}" required>
+                    </div>
 
-                    <input name="contact" class="form-control mb-2"
-                           value="{{ client.contact }}" required>
+                    <div class="mb-3">
+                        <label class="form-label">Contact</label>
+                        <input name="contact" class="form-control" value="{{ client.contact }}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Requirement</label>
+                        <select name="requirement" class="form-select" required>
+                            <option value="Rent" {% if client.requirement == "Rent" %}selected{% endif %}>Rent</option>
+                            <option value="Sale" {% if client.requirement == "Sale" %}selected{% endif %}>Sale</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Property Type</label>
+                        <select name="property_type" class="form-select" required>
+                            <option value="Residential" {% if client.property_type == "Residential" %}selected{% endif %}>Residential</option>
+                            <option value="Commercial" {% if client.property_type == "Commercial" %}selected{% endif %}>Commercial</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Preferred Location</label>
+                        <input name="location" class="form-control mb-2" value="{{ client.location }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Budget</label>
+                        <input type="number" name="budget" class="form-control mb-2" value="{{ client.budget }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Follow-up Date</label>
+                        <input type="date" name="followup_date" class="form-control" value="{{ client.followup_date }}">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Discussion Notes</label>
+                        <textarea name="notes" class="form-control mb-2">{{ client.notes }}</textarea>
+                    </div>
 
-                    <select name="requirement" class="form-select mb-2" required>
-                        <option value="Rent" {% if client.requirement == "Rent" %}selected{% endif %}>Rent</option>
-                        <option value="Sale" {% if client.requirement == "Sale" %}selected{% endif %}>Sale</option>
-                    </select>
+                    <div class="mb-3">
+                        <label class="form-label">Next Action</label>
+                        <input name="next_action" class="form-control" value="{{ client.next_action }}">
+                    </div>
+                    
+                    <div class="d-grid gap-2 mt-3">
+                        <button type="submit" class="btn btn-dark">
+                            Update Client
+                        </button>
 
-                    <select name="property_type" class="form-select mb-2" required>
-                        <option value="Residential" {% if client.property_type == "Residential" %}selected{% endif %}>Residential</option>
-                        <option value="Commercial" {% if client.property_type == "Commercial" %}selected{% endif %}>Commercial</option>
-                    </select>
-
-                    <input name="location" class="form-control mb-2"
-                           value="{{ client.location }}">
-
-                    <input type="number" name="budget" class="form-control mb-2"
-                           value="{{ client.budget }}">
-
-                    <input type="date" name="followup_date"
-                           class="form-control mb-2"
-                           value="{{ client.followup_date }}">
-
-                    <textarea name="notes" class="form-control mb-2">{{ client.notes }}</textarea>
-
-                    <input name="next_action" class="form-control mb-3"
-                           value="{{ client.next_action }}">
-
-                    <button class="btn btn-dark w-100">Update Client</button>
+                        <a href="/clients" class="btn btn-outline-secondary">
+                            Cancel
+                        </a>
+                    </div>
 
                 </form>
             </div>
