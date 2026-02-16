@@ -71,6 +71,12 @@ def init_db():
         ADD COLUMN IF NOT EXISTS dealer_contact TEXT
     """)
 
+    cursor.execute("""
+    ALTER TABLE clients
+    ADD COLUMN IF NOT EXISTS profession TEXT
+    """)
+
+
     conn.commit()
     cursor.close()
     conn.close()

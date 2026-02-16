@@ -20,6 +20,12 @@
             </a>
         </div>
 
+        {% if client.profession %}
+        <div class="small text-muted">
+            Profession: {{ client.profession }}
+        </div>
+        {% endif %}
+
         <div class="mt-2">
             {{ client.requirement }} | {{ client.property_type }}
         </div>

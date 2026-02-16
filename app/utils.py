@@ -28,5 +28,6 @@ def parse_client_form(form):
         "budget": budget,
         "followup_date": followup,
         "notes": form.get("notes"),
-        "next_action": form.get("next_action")
+        "next_action": form.get("next_action"),
+        "profession": form.get("profession")
     }

@@ -20,6 +20,11 @@
                         <label class="form-label">Contact</label>
                         <input name="contact" class="form-control" value="{{ client.contact }}" required>
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Profession</label>
+                        <input type="text" name="profession" class="form-control" value="{{ client.profession or '' }}">
+                    </div>
                     
                     <div class="mb-3">
                         <label class="form-label">Requirement</label>

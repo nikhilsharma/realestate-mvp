@@ -7,8 +7,8 @@ def create_client(data):
 
     cursor.execute("""
         INSERT INTO clients
-        (name, contact, requirement, property_type, location, budget, followup_date, status, notes, next_action)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (name, contact, requirement, property_type, location, budget, followup_date, status, notes, next_action, profession)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """, (
         data["name"],
         data["contact"],
@@ -19,7 +19,8 @@ def create_client(data):
         data["followup_date"],
         "Active",
         data["notes"],
-        data["next_action"]
+        data["next_action"],
+        data.get("profession")
     ))
 
     conn.commit()
@@ -102,7 +103,8 @@ def update_client(client_id, data):
             budget=%s,
             followup_date=%s,
             notes=%s,
-            next_action=%s
+            next_action=%s,                  
+            profession=%s
         WHERE id=%s
     """, (
         data["name"],
@@ -114,6 +116,7 @@ def update_client(client_id, data):
         data["followup_date"],
         data["notes"],
         data["next_action"],
+        data.get("profession"),
         client_id
     ))
 
