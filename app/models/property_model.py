@@ -1,5 +1,6 @@
 from app.db import get_db_connection
 from app.services.matching import build_location_filter
+from app.services.client_rules import map_client_requirement_to_property_mode
 
 def create_property(data):
     conn = get_db_connection()
@@ -80,13 +81,19 @@ def get_matching_properties(client):
     conn = get_db_connection()
     cursor = conn.cursor()
 
+    mode = map_client_requirement_to_property_mode(client.get("requirement"))
+
+    if not mode:
+        cursor.close()
+        conn.close()
+        return []
+
     query = """
         SELECT * FROM properties
         WHERE mode = %s
         AND type = %s
     """
-
-    params = [client["requirement"], client["property_type"]]
+    params = [mode, client["property_type"]]
 
     # Location filter
     if client["location"]:

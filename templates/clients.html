@@ -51,10 +51,11 @@
         </div>
 
         <div class="mt-2 d-flex justify-content-end gap-2">
-            <a href="/client/{{ client.id }}/matches"
-            class="btn btn-sm btn-outline-primary">
-                Show Matches
-            </a>
+            {% if client.requirement in ["Rent", "Buy"] %}
+                <a href="/client/{{ client.id }}/matches" class="btn btn-sm btn-outline-primary">
+                    Show Matches
+                </a>
+            {% endif %}
 
             <a href="/edit-client/{{ client.id }}"
             class="btn btn-sm btn-outline-dark">

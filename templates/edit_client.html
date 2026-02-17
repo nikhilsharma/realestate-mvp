@@ -30,7 +30,8 @@
                         <label class="form-label">Requirement</label>
                         <select name="requirement" class="form-select" required>
                             <option value="Rent" {% if client.requirement == "Rent" %}selected{% endif %}>Rent</option>
-                            <option value="Sale" {% if client.requirement == "Sale" %}selected{% endif %}>Sale</option>
+                            <option value="Buy" {% if client.requirement == "Buy" %}selected{% endif %}>Buy</option>
+                            <option value="Sell" {% if client.requirement == "Sell" %}selected{% endif %}>Sell</option>
                         </select>
                     </div>
                     
