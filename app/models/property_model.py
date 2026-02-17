@@ -1,4 +1,5 @@
 from app.db import get_db_connection
+from app.services.matching import build_location_filter
 
 def create_property(data):
     conn = get_db_connection()
@@ -89,8 +90,9 @@ def get_matching_properties(client):
 
     # Location filter
     if client["location"]:
-        query += " AND location ILIKE %s"
-        params.append(f"%{client['location']}%")
+        location_sql, location_params = build_location_filter(client.get("location"))
+        query += location_sql
+        params.extend(location_params)
 
     # Budget filter (±10%)
     if client["budget"]:
