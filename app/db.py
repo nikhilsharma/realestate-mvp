@@ -76,6 +76,10 @@ def init_db():
     ADD COLUMN IF NOT EXISTS profession TEXT
     """)
 
+    cursor.execute("""
+    ALTER TABLE clients
+    ADD COLUMN IF NOT EXISTS location_normalized TEXT
+    """)
 
     conn.commit()
     cursor.close()

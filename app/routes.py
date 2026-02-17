@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, session
 from config import Config
 from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property
-from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client
+from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller
 from app.utils import parse_client_form, parse_property_form
 
 def register_routes(app):
@@ -138,5 +138,23 @@ def register_routes(app):
             return redirect("/clients")
 
         return render_template("edit_client.html", client=client)
+
+    @app.route("/client/<int:client_id>/buyer-matches")
+    def show_buyer_matches(client_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        seller = get_client_by_id(client_id)
+
+        if seller["requirement"] != "Sell":
+            return redirect("/clients")
+
+        buyers = get_matching_buyers_for_seller(seller)
+
+        return render_template(
+            "buyer_matches.html",
+            seller=seller,
+            buyers=buyers
+        )
 
 

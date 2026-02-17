@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Interested Buyers{% endblock %}
+
+{% block content %}
+
+<h4 class="mb-3">
+    Buyers for {{ seller.property_type }} in {{ seller.location }}
+</h4>
+
+{% if buyers %}
+    {% for buyer in buyers %}
+        <div class="card mb-2">
+            <div class="card-body">
+                <strong>{{ buyer.name }}</strong><br>
+                📍 {{ buyer.location }}<br>
+                Budget: ₹ {{ buyer.budget }}<br>
+                📞 <a href="tel:{{ buyer.contact }}">{{ buyer.contact }}</a>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="text-muted">No buyers found.</div>
+{% endif %}
+
+{% endblock %}

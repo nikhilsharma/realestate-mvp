@@ -1,20 +1,24 @@
 from app.db import get_db_connection
 from datetime import date
+from app.services.location_utils import normalize_location
+from app.services.seller_matching import filter_matching_buyers
 
 def create_client(data):
+    location_normalized = normalize_location(data.get("location"))
     conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
         INSERT INTO clients
-        (name, contact, requirement, property_type, location, budget, followup_date, status, notes, next_action, profession)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (name, contact, requirement, property_type, location, location_normalized, budget, followup_date, status, notes, next_action, profession)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """, (
         data["name"],
         data["contact"],
         data["requirement"],
         data["property_type"],
         data["location"],
+        location_normalized,
         data["budget"],
         data["followup_date"],
         "Active",
@@ -90,6 +94,7 @@ def get_client_by_id(client_id):
     return result
 
 def update_client(client_id, data):
+    location_normalized = normalize_location(data.get("location"))
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -100,6 +105,7 @@ def update_client(client_id, data):
             requirement=%s,
             property_type=%s,
             location=%s,
+            location_normalized=%s,
             budget=%s,
             followup_date=%s,
             notes=%s,
@@ -123,3 +129,26 @@ def update_client(client_id, data):
     conn.commit()
     cursor.close()
     conn.close()
+
+def get_matching_buyers_for_seller(seller):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Step 1: Fetch all potential buyers (basic filter only)
+    cursor.execute("""
+        SELECT * FROM clients
+        WHERE requirement = %s
+        AND property_type = %s
+        ORDER BY created_at DESC
+    """, ("Buy", seller["property_type"]))
+
+    rows = cursor.fetchall()
+    columns = [desc[0] for desc in cursor.description]
+    buyers = [dict(zip(columns, row)) for row in rows]
+
+    cursor.close()
+    conn.close()
+
+    # Step 2: Apply intelligent filtering in Python
+    return filter_matching_buyers(seller, buyers)
