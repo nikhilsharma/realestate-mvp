@@ -147,6 +147,15 @@
                                     </button>
                                 {% endif %}
                             </form>
+                            {% if property.is_active %}
+                            <form method="POST"
+                                action="/property/{{ property.id }}/delete"
+                                onsubmit="return confirm('Delete this property?');">
+                                <button class="btn btn-sm btn-outline-danger">
+                                    Delete
+                                </button>
+                            </form>
+                            {% endif %}
     </div>
 </div>
 

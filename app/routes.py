@@ -1,7 +1,7 @@
 from flask import render_template, request, redirect, session
 from config import Config
-from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property
-from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller
+from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property, soft_delete_property
+from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller, soft_delete_client
 from app.utils import parse_client_form, parse_property_form
 
 def register_routes(app):
@@ -156,5 +156,22 @@ def register_routes(app):
             seller=seller,
             buyers=buyers
         )
+    
+    @app.route("/client/<int:client_id>/delete", methods=["POST"])
+    def delete_client(client_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        soft_delete_client(client_id)
+        return redirect("/clients")
+    
+    @app.route("/property/<int:property_id>/delete", methods=["POST"])
+    def delete_property(property_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        soft_delete_property(property_id)
+        return redirect("/")
+
 
 

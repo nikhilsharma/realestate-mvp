@@ -36,7 +36,7 @@ def get_all_clients():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM clients ORDER BY created_at DESC")
+    cursor.execute("SELECT * FROM clients WHERE is_active = TRUE ORDER BY created_at DESC")
     
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
@@ -60,6 +60,7 @@ def get_followups_today():
         SELECT * FROM clients
         WHERE followup_date = %s
         AND status = 'Active'
+        AND is_active = TRUE
         ORDER BY created_at DESC
     """, (today,))
 
@@ -118,6 +119,7 @@ def update_client(client_id, data):
         data["requirement"],
         data["property_type"],
         data["location"],
+        location_normalized,
         data["budget"],
         data["followup_date"],
         data["notes"],
@@ -140,6 +142,7 @@ def get_matching_buyers_for_seller(seller):
         SELECT * FROM clients
         WHERE requirement = %s
         AND property_type = %s
+        AND is_active = TRUE
         ORDER BY created_at DESC
     """, ("Buy", seller["property_type"]))
 
@@ -152,3 +155,17 @@ def get_matching_buyers_for_seller(seller):
 
     # Step 2: Apply intelligent filtering in Python
     return filter_matching_buyers(seller, buyers)
+
+def soft_delete_client(client_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE clients
+        SET is_active = FALSE
+        WHERE id = %s
+    """, (client_id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()

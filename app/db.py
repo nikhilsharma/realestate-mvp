@@ -81,6 +81,16 @@ def init_db():
     ADD COLUMN IF NOT EXISTS location_normalized TEXT
     """)
 
+    cursor.execute("""
+    ALTER TABLE clients
+    ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE
+    """)
+
+    cursor.execute("""
+    ALTER TABLE properties
+    ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

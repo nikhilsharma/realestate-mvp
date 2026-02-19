@@ -8,8 +8,8 @@ def create_property(data):
 
     cursor.execute("""
         INSERT INTO properties
-        (type, mode, location, budget, area, owner_name, owner_contact, dealer_name, dealer_contact, video_link)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (type, mode, location, budget, area, owner_name, owner_contact, status, dealer_name, dealer_contact, video_link)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """, (
         data["type"],
         data["mode"],
@@ -18,6 +18,7 @@ def create_property(data):
         data["area"],
         data["owner_name"],
         data["owner_contact"],
+        "Available",
         data.get("dealer_name"),
         data.get("dealer_contact"),
         data["video_link"]
@@ -31,7 +32,7 @@ def get_properties(search=None, mode=None):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    query = "SELECT * FROM properties WHERE 1=1"
+    query = "SELECT * FROM properties WHERE is_active = TRUE AND status = 'Available'"
     params = []
 
     if search and search.strip():
@@ -92,6 +93,8 @@ def get_matching_properties(client):
         SELECT * FROM properties
         WHERE mode = %s
         AND type = %s
+        AND is_active = TRUE
+        AND status = 'Available'
     """
     params = [mode, client["property_type"]]
 
@@ -171,6 +174,20 @@ def update_property(property_id, data):
         data["video_link"],
         property_id
     ))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def soft_delete_property(property_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE properties
+        SET is_active = FALSE
+        WHERE id = %s
+    """, (property_id,))
 
     conn.commit()
     cursor.close()
