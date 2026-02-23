@@ -3,6 +3,7 @@ from config import Config
 from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property, soft_delete_property
 from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller, soft_delete_client
 from app.utils import parse_client_form, parse_property_form
+from app.services.request_utils import extract_filters
 
 def register_routes(app):
 
@@ -10,18 +11,16 @@ def register_routes(app):
     def dashboard():
         if not session.get("logged_in"):
             return redirect("/login")
-        search = request.args.get("search")
-        mode = request.args.get("mode")
         
-        properties = get_properties(search=search, mode=mode)
+        filters = extract_filters(request)
+        properties = get_properties(**filters)
+        
         followups = get_followups_today()
-
         return render_template(
             "dashboard.html", 
             properties=properties,
-            search=search,
-            mode=mode,
             followups=followups,
+            **filters
         )
 
     @app.route("/add-property", methods=["GET", "POST"])

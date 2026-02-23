@@ -1,0 +1,117 @@
+<form method="GET" class="mb-4 auto-submit-filters">
+
+    <div class="card border-0 shadow-sm p-3">
+
+        <div class="row g-4">
+
+            <!-- Listing Status -->
+            <div class="col-12 col-md-6 col-lg-auto">
+                <div class="fw-semibold small text-muted mb-2">
+                    Listing
+                </div>
+
+                <div class="btn-group w-100" role="group">
+
+                    <input type="checkbox"
+                           class="btn-check"
+                           id="statusAvailable"
+                           name="status"
+                           value="Available"
+                           {% if 'Available' in status_filters %}checked{% endif %}>
+                    <label class="btn btn-outline-success"
+                           for="statusAvailable">
+                        Available
+                    </label>
+
+                    <input type="checkbox"
+                           class="btn-check"
+                           id="statusClosed"
+                           name="status"
+                           value="Closed"
+                           {% if 'Closed' in status_filters %}checked{% endif %}>
+                    <label class="btn btn-outline-secondary"
+                           for="statusClosed">
+                        Sold / Rented
+                    </label>
+
+                </div>
+            </div>
+
+            <!-- Record State -->
+            <div class="col-12 col-md-6 col-lg-auto">
+                <div class="fw-semibold small text-muted mb-2">
+                    Records
+                </div>
+
+                <div class="btn-group w-100" role="group">
+
+                    <input type="checkbox"
+                           class="btn-check"
+                           id="activeTrue"
+                           name="is_active"
+                           value="true"
+                           {% if 'true' in active_filters %}checked{% endif %}>
+                    <label class="btn btn-outline-primary"
+                           for="activeTrue">
+                        Active
+                    </label>
+
+                    <input type="checkbox"
+                           class="btn-check"
+                           id="activeFalse"
+                           name="is_active"
+                           value="false"
+                           {% if 'false' in active_filters %}checked{% endif %}>
+                    <label class="btn btn-outline-danger"
+                           for="activeFalse">
+                        Archived
+                    </label>
+
+                </div>
+            </div>
+
+            <!-- Clear Filters -->
+            <div class="col-12 col-lg-auto d-flex align-items-end">
+                <a href="{{ url_for('dashboard') }}"
+                   class="btn btn-outline-dark w-100">
+                    Clear Filters
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+
+<!-- Filter Summary -->
+<div class="mb-4">
+
+    <div class="text-muted small mb-2">
+        Showing <strong>{{ properties|length }}</strong> properties
+    </div>
+
+    <div class="d-flex flex-wrap gap-2">
+
+        {% for s in status_filters %}
+            <span class="badge rounded-pill bg-success-subtle text-success border px-3 py-2">
+                {{ s }}
+            </span>
+        {% endfor %}
+
+        {% if 'true' in active_filters %}
+            <span class="badge rounded-pill bg-primary-subtle text-primary border px-3 py-2">
+                Active
+            </span>
+        {% endif %}
+
+        {% if 'false' in active_filters %}
+            <span class="badge rounded-pill bg-danger-subtle text-danger border px-3 py-2">
+                Archived
+            </span>
+        {% endif %}
+
+    </div>
+
+</div>

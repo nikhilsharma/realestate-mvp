@@ -1,6 +1,8 @@
 from app.db import get_db_connection
 from app.services.matching import build_location_filter
 from app.services.client_rules import map_client_requirement_to_property_mode
+from app.services.query_builder import build_in_filter
+from app.services.property_query import _build_property_query
 
 def create_property(data):
     conn = get_db_connection()
@@ -28,33 +30,27 @@ def create_property(data):
     cursor.close()
     conn.close()
 
-def get_properties(search=None, mode=None):
+def get_properties(
+    search=None,
+    mode=None,
+    active_filters=None,
+    status_filters=None
+):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    query = "SELECT * FROM properties WHERE is_active = TRUE AND status = 'Available'"
-    params = []
-
-    if search and search.strip():
-        search = search.strip()
-        query += " AND (location ILIKE %s OR owner_name ILIKE %s)"
-        params.extend([f"%{search}%", f"%{search}%"])
-
-    if mode and mode.strip():
-        mode = mode.strip()
-        query += " AND mode = %s"
-        params.append(mode)
-
-    query += " ORDER BY created_at DESC"
+    query, params = _build_property_query(
+        search,
+        mode,
+        active_filters,
+        status_filters
+    )
 
     cursor.execute(query, tuple(params))
 
     rows = cursor.fetchall()
     columns = [desc[0] for desc in cursor.description]
-
-    results = []
-    for row in rows:
-        results.append(dict(zip(columns, row)))
+    results = [dict(zip(columns, row)) for row in rows]
 
     cursor.close()
     conn.close()
