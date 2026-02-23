@@ -86,7 +86,9 @@
                     </div>
 
                     <div class="small text-muted">
-                        {{ property.area }} sq ft
+                        <strong>{{ property.area }}</strong> sq ft
+                        <span class="mx-1">•</span>
+                            {{ (property.area / 9) | round(2) }} sq gaj
                     </div>
 
                     <hr>
