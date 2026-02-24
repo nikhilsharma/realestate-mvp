@@ -17,9 +17,16 @@
 
       <form method="POST" action="/toggle-status/{{ property.id }}">
         {% if property.status == "Available" %}
-          <button class="btn btn-sm btn-outline-warning">
-            Mark Sold
-          </button>
+            {% if property.mode == "Sale" %}
+                <button class="btn btn-sm btn-outline-warning">
+                    Mark Sold
+                </button>
+            {% endif %}
+            {% if property.mode == "Rent" %}
+                <button class="btn btn-sm btn-outline-warning">
+                    Mark Rented
+                </button>
+            {% endif %}    
         {% else %}
           <button class="btn btn-sm btn-outline-success">
             Reopen
