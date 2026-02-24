@@ -1,177 +1,64 @@
-{% extends "base.html" %}
-
-{% block title %}Dashboard{% endblock %}
-
-{% block content %}
-
-{% if followups %}
+{% extends "base.html" %} {% block title %}Dashboard{% endblock %} {% block
+content %} {% if followups %}
 <div class="card border-warning mb-4 shadow-sm">
-    <div class="card-body">
-        <h5 class="text-warning mb-3">
-            📅 Follow-ups Due Today ({{ followups|length }})
-        </h5>
+  <div class="card-body">
+    <h5 class="text-warning mb-3">
+      📅 Follow-ups Due Today ({{ followups|length }})
+    </h5>
 
-        {% for client in followups %}
-            <div class="d-flex justify-content-between align-items-center mb-2">
-                <div>
-                    <strong>{{ client.name }}</strong><br>
-                    <small class="text-muted">
-                        {{ client.next_action }}
-                    </small>
-                </div>
+    {% for client in followups %}
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <div>
+        <strong>{{ client.name }}</strong><br />
+        <small class="text-muted"> {{ client.next_action }} </small>
+      </div>
 
-                <a href="/clients" class="btn btn-sm btn-outline-warning">
-                    View
-                </a>
-            </div>
-        {% endfor %}
+      <a href="/clients" class="btn btn-sm btn-outline-warning"> View </a>
     </div>
+    {% endfor %}
+  </div>
 </div>
-{% endif %}
-
-{% include "partials/property_filters.html" %}
+{% endif %} {% include "partials/property_filters.html" %}
 
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h4 class="mb-0">Properties</h4>
-    <a href="/add-property" class="btn btn-dark btn-sm">+ Add</a>
+  <h4 class="mb-0">Properties</h4>
+  <a href="/add-property" class="btn btn-dark btn-sm">+ Add</a>
 </div>
 
 <form method="GET" class="row g-2 mb-3">
+  <div class="col-7">
+    <input
+      type="text"
+      name="search"
+      class="form-control"
+      placeholder="Search location / owner"
+      value="{{ search or '' }}"
+    />
+  </div>
 
-    <div class="col-7">
-        <input type="text"
-               name="search"
-               class="form-control"
-               placeholder="Search location / owner"
-               value="{{ search or '' }}">
-    </div>
+  <div class="col-3">
+    <select name="mode" class="form-select">
+      <option value="">All</option>
+      <option value="Rent" {% if mode == "Rent" %}selected{% endif %}>
+        Rent
+      </option>
+      <option value="Sale" {% if mode == "Sale" %}selected{% endif %}>
+        Sale
+      </option>
+    </select>
+  </div>
 
-    <div class="col-3">
-        <select name="mode" class="form-select">
-            <option value="">All</option>
-            <option value="Rent" {% if mode == "Rent" %}selected{% endif %}>Rent</option>
-            <option value="Sale" {% if mode == "Sale" %}selected{% endif %}>Sale</option>
-        </select>
-    </div>
-
-    <div class="col-2">
-        <button class="btn btn-dark w-100">Go</button>
-    </div>
-
+  <div class="col-2">
+    <button class="btn btn-dark w-100">Go</button>
+  </div>
 </form>
 
 {% if properties %}
-    <div class="row">
-        {% for property in properties %}
-        <div class="col-12 col-md-6 mb-3">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h6 class="fw-bold mb-1">
-                            {{ property.type }} - {{ property.mode }}
-
-                            {% if property.status == "Available" %}
-                                <span class="badge bg-success">Available</span>
-                            {% else %}
-                                <span class="badge bg-secondary">Closed</span>
-                            {% endif %}
-                        </h6>
-                    </div>
-                    <div class="text-muted small mb-2">
-                        📍 {{ property.location }}
-                    </div>
-
-                    <div class="fw-semibold">
-                        ₹ {{ property.budget }}
-                    </div>
-
-                    <div class="small text-muted">
-                        <strong>{{ property.area }}</strong> sq ft
-                        <span class="mx-1">•</span>
-                            {{ (property.area / 9) | round(2) }} sq gaj
-                    </div>
-
-                    <hr>
-
-                    <div class="small">
-                        Owner: {{ property.owner_name }} <br>
-                        <a href="tel:{{ property.owner_contact }}" class="text-decoration-none">
-                            📞 {{ property.owner_contact }}
-                        </a>
-                    </div>
-                    
-                    {% if property.dealer_name %}
-                    <div class="mt-2 pt-2 border-top small text-muted">
-                        Dealer: {{ property.dealer_name }} <br>
-                        <a href="tel:{{ property.dealer_contact }}">
-                            📞 {{ property.dealer_contact }}
-                        </a>
-                    </div>
-                    {% endif %}
-                
-                    <hr>
-
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <small class="text-muted">
-                            Added {{ property.created_at.strftime("%d-%m-%Y") if property.created_at }}
-                        </small>
-
-                        <div class="d-flex gap-2">
-
-                            {% if property.video_link %}
-                            <a target="_blank"
-                                href="https://wa.me/?text={{ (
-                                'Urban Bricks & Bonds\n\n' ~
-                                property.type ~ ' - ' ~ property.mode ~ '\n' ~
-                                'Location: ' ~ property.location ~ '\n' ~
-                                'Budget: ₹ ' ~ property.budget ~ '\n' ~
-                                'Area: ' ~ property.area ~ ' sq ft\n\n' ~
-                                'Video: ' ~ property.video_link
-                                ) | urlencode }}"
-                                class="btn btn-sm btn-success">
-                                Share
-                            </a>
-                            {% endif %}
-
-                            <a href="/edit-property/{{ property.id }}" 
-                            class="btn btn-sm btn-outline-dark">
-                                Edit
-                            </a>
-
-                            <form method="POST" action="/toggle-status/{{ property.id }}">
-                                {% if property.status == "Available" %}
-                                    <button class="btn btn-sm btn-outline-danger">
-                                        Close
-                                    </button>
-                                {% else %}
-                                    <button class="btn btn-sm btn-outline-success">
-                                        Reopen
-                                    </button>
-                                {% endif %}
-                            </form>
-                            {% if property.is_active %}
-                            <form method="POST"
-                                action="/property/{{ property.id }}/delete"
-                                onsubmit="return confirm('Delete this property?');">
-                                <button class="btn btn-sm btn-outline-danger">
-                                    Delete
-                                </button>
-                            </form>
-                            {% endif %}
-    </div>
+<div class="row">
+  {% for property in properties %}
+    {% include "partials/property_card.html" %}
+  {% endfor %}
 </div>
-
-
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>
 {% else %}
-    <div class="text-center text-muted mt-5">
-        No properties yet.
-    </div>
-{% endif %}
-
-{% endblock %}
+<div class="text-center text-muted mt-5">No properties yet.</div>
+{% endif %} {% endblock %}

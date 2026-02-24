@@ -1,6 +1,6 @@
 from flask import render_template, request, redirect, session
 from config import Config
-from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property, soft_delete_property
+from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property, soft_delete_property, restore_property_by_id
 from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller, soft_delete_client
 from app.utils import parse_client_form, parse_property_form
 from app.services.request_utils import extract_filters
@@ -170,6 +170,14 @@ def register_routes(app):
             return redirect("/login")
 
         soft_delete_property(property_id)
+        return redirect("/")
+    
+    @app.route("/property/<int:property_id>/restore", methods=["POST"])
+    def restore_property(property_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+        
+        restore_property_by_id(property_id)
         return redirect("/")
 
 

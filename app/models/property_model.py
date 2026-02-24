@@ -188,3 +188,18 @@ def soft_delete_property(property_id):
     conn.commit()
     cursor.close()
     conn.close()
+
+def restore_property_by_id(property_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE properties
+        SET is_active = TRUE
+        WHERE id = %s
+        AND is_active = FALSE
+    """, (property_id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
