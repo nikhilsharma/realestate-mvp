@@ -1,0 +1,9 @@
+{% if properties %}
+<div class="row">
+  {% for property in properties %}
+    {% include "partials/property_card.html" %}
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center text-muted mt-5">No properties yet.</div>
+{% endif %}

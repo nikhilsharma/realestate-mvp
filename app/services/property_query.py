@@ -1,37 +1,39 @@
 from app.services.query_builder import build_in_filter
 
-def _build_property_query(search, mode, active_filters, status_filters):
-
-    # Defaults
-    active_filters = active_filters or ["true"]
-    status_filters = status_filters or ["Available"]
+def _build_property_query(search, mode_filters, active_filters, status_filters):
 
     conditions = []
     params = []
 
-    # is_active filter
+    # is_active
     sql, p = build_in_filter("is_active", active_filters, convert_bool=True)
     if sql:
         conditions.append(sql.replace(" AND ", ""))
         params.extend(p)
 
-    # status filter
+    # status
     sql, p = build_in_filter("status", status_filters)
     if sql:
         conditions.append(sql.replace(" AND ", ""))
         params.extend(p)
 
-    # search filter
-    if search and search.strip():
-        conditions.append("(location ILIKE %s OR owner_name ILIKE %s)")
-        params.extend([f"%{search.strip()}%", f"%{search.strip()}%"])
+    # mode
+    sql, p = build_in_filter("mode", mode_filters)
+    if sql:
+        conditions.append(sql.replace(" AND ", ""))
+        params.extend(p)
 
-    # mode filter
-    if mode and mode.strip():
-        conditions.append("mode = %s")
-        params.append(mode.strip())
+    # search
+    if search:
+        conditions.append("""
+        (
+            location ILIKE %s OR
+            owner_name ILIKE %s OR
+            dealer_name ILIKE %s
+        )
+        """)
+        params.extend([f"%{search}%", f"%{search}%", f"%{search}%"])
 
-    # Final query assembly
     query = "SELECT * FROM properties"
 
     if conditions:

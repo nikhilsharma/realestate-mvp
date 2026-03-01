@@ -1,4 +1,6 @@
 from app.services.location_utils import extract_keywords
+from app.config.constants import BUDGET_LOWER_MULTIPLIER
+from app.config.constants import BUDGET_UPPER_MULTIPLIER
 
 
 def locations_match(seller_loc, buyer_loc):
@@ -47,8 +49,8 @@ def filter_matching_buyers(seller, buyers):
 
         # --- Budget check (±10%) ---
         if seller_budget and buyer_budget:
-            lower = int(seller_budget * 0.9)
-            upper = int(seller_budget * 1.1)
+            lower = int(seller_budget * BUDGET_LOWER_MULTIPLIER)
+            upper = int(seller_budget * BUDGET_UPPER_MULTIPLIER)
 
             if not (lower <= buyer_budget <= upper):
                 continue

@@ -1,0 +1,42 @@
+{% if hot_leads %}
+<div class="card border-danger mb-4 shadow-sm">
+  <div class="card-body">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h5 class="text-danger mb-0">
+        🔥 Hot Leads ({{ hot_leads|length }})
+      </h5>
+      <a href="/clients?lead_temperature=hot"
+         class="btn btn-sm btn-outline-danger">
+         View All
+      </a>
+    </div>
+
+    {% for client in hot_leads %}
+    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+      <div>
+        <strong>{{ client.name }}</strong>
+        <span class="badge bg-danger ms-2">Hot</span>
+
+        {% if client.followup_date %}
+        <br>
+        <small class="text-muted">
+          Follow-up: {{ client.followup_date }}
+        </small>
+        {% endif %}
+      </div>
+
+      <div class="text-end">
+        <small class="text-danger fw-bold d-block">
+          Score: {{ client.lead_score }}
+        </small>
+        <a href="/clients" class="btn btn-sm btn-danger mt-1">
+          Call Now
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% endif %}

@@ -1,64 +1,11 @@
-{% extends "base.html" %} {% block title %}Dashboard{% endblock %} {% block
-content %} {% if followups %}
-<div class="card border-warning mb-4 shadow-sm">
-  <div class="card-body">
-    <h5 class="text-warning mb-3">
-      📅 Follow-ups Due Today ({{ followups|length }})
-    </h5>
+{% extends "base.html" %} 
+{% block title %}Dashboard{% endblock %} 
+{% block content %}
 
-    {% for client in followups %}
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <div>
-        <strong>{{ client.name }}</strong><br />
-        <small class="text-muted"> {{ client.next_action }} </small>
-      </div>
+{% include "partials/dashboard/_stats_zone.html" %}
 
-      <a href="/clients" class="btn btn-sm btn-outline-warning"> View </a>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-{% endif %} {% include "partials/property_filters.html" %}
+{% include "partials/dashboard/_priority_zone.html" %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-  <h4 class="mb-0">Properties</h4>
-  <a href="/add-property" class="btn btn-dark btn-sm">+ Add</a>
-</div>
+{% include "partials/dashboard/_recent_properties.html" %}
 
-<form method="GET" class="row g-2 mb-3">
-  <div class="col-7">
-    <input
-      type="text"
-      name="search"
-      class="form-control"
-      placeholder="Search location / owner"
-      value="{{ search or '' }}"
-    />
-  </div>
-
-  <div class="col-3">
-    <select name="mode" class="form-select">
-      <option value="">All</option>
-      <option value="Rent" {% if mode == "Rent" %}selected{% endif %}>
-        Rent
-      </option>
-      <option value="Sale" {% if mode == "Sale" %}selected{% endif %}>
-        Sale
-      </option>
-    </select>
-  </div>
-
-  <div class="col-2">
-    <button class="btn btn-dark w-100">Go</button>
-  </div>
-</form>
-
-{% if properties %}
-<div class="row">
-  {% for property in properties %}
-    {% include "partials/property_card.html" %}
-  {% endfor %}
-</div>
-{% else %}
-<div class="text-center text-muted mt-5">No properties yet.</div>
-{% endif %} {% endblock %}
+{% endblock %}

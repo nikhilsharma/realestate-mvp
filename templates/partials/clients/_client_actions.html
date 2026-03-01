@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-end gap-2">
+
+  {% if client.requirement == "Sell" %}
+      <a href="/client/{{ client.id }}/buyer-matches"
+         class="btn btn-sm btn-outline-dark">
+          Show Interested Buyers
+      </a>
+  {% elif client.requirement in ["Rent", "Buy"] %}
+      <a href="/client/{{ client.id }}/matches"
+         class="btn btn-sm btn-outline-dark">
+          Show Matches
+      </a>
+  {% endif %}
+
+  <a href="/edit-client/{{ client.id }}"
+     class="btn btn-sm btn-outline-dark">
+      Edit
+  </a>
+
+  <form method="POST"
+        action="/client/{{ client.id }}/delete"
+        onsubmit="return confirm('Are you sure?');">
+      <button class="btn btn-sm btn-outline-danger">
+          Delete
+      </button>
+  </form>
+
+</div>

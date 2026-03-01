@@ -1,8 +1,49 @@
 .auto-submit-filters .btn {
-    min-height: 44px;
+    min-height: 36px;              /* consistent compact height */
+    display: inline-flex;          /* proper vertical centering */
+    align-items: center;
+    justify-content: center;
+    padding: 0 14px;
+    border-radius: 999px;          /* pill style */
 }
 
 .badge {
     font-weight: 500;
     font-size: 0.85rem;
+}
+
+.btn-primary {
+    box-shadow: 0 0 0 2px rgba(13,110,253,.2);
+}
+
+.filter-card .btn {
+    min-width: 70px;
+}
+
+.filter-card .btn-outline-warning {
+    color: #b8860b; /* darker for readability */
+}
+
+/* Spinner layering */
+.filter-card .filter-spinner {
+    z-index: 10;
+}
+
+.dashboard-stat-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+.recent-property-link {
+    transition: background-color 0.15s ease;
+    padding: 6px 8px;
+    border-radius: 6px;
+}
+
+.recent-property-link:hover {
+    background-color: rgba(0,0,0,0.04);
 }

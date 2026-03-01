@@ -32,7 +32,7 @@ def create_property(data):
 
 def get_properties(
     search=None,
-    mode=None,
+    mode_filters=None,
     active_filters=None,
     status_filters=None
 ):
@@ -41,7 +41,7 @@ def get_properties(
 
     query, params = _build_property_query(
         search,
-        mode,
+        mode_filters,
         active_filters,
         status_filters
     )

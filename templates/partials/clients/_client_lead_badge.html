@@ -1,0 +1,13 @@
+{% if client.lead_temperature == "hot" %}
+  <span class="badge bg-danger rounded-pill">
+    🔥 Hot ({{ client.lead_score }})
+  </span>
+{% elif client.lead_temperature == "warm" %}
+  <span class="badge bg-warning text-dark">
+    Warm ({{ client.lead_score }})
+  </span>
+{% else %}
+  <span class="badge bg-secondary">
+    Cold
+  </span>
+{% endif %}

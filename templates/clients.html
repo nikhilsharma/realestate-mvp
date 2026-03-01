@@ -1,83 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Clients{% endblock %}
-
+{% block title %}
+    {{ page_title or "Clients" }}
+{% endblock %}
 {% block content %}
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h4>Clients</h4>
-    <a href="/add-client" class="btn btn-dark btn-sm">+ Add</a>
-</div>
-
-{% for client in clients %}
-<div class="card mb-3 shadow-sm">
-    <div class="card-body">
-
-        <h6 class="fw-bold">{{ client.name }}</h6>
-
-        <div class="small text-muted">
-            <a href="tel:{{ client.contact }}" class="text-decoration-none">
-                📞 {{ client.contact }}
-            </a>
-        </div>
-
-        {% if client.profession %}
-        <div class="small text-muted">
-            Profession: {{ client.profession }}
-        </div>
-        {% endif %}
-
-        <div class="mt-2">
-            {{ client.requirement }} | {{ client.property_type }}
-        </div>
-
-        <div class="small">
-            📍 {{ client.location }}
-        </div>
-
-        <div class="fw-semibold">
-            ₹ {{ client.budget }}
-        </div>
-
-        <div class="small text-muted">
-            Follow-up: {{ client.followup_date.strftime("%d-%m-%Y") if client.followup_date }}
-        </div>
-
-        <div class="mt-2 small">
-            <strong>Next:</strong> {{ client.next_action }}
-        </div>
-
-        <div class="small text-muted mt-1">
-            {{ client.notes }}
-        </div>
-
-        <div class="mt-2 d-flex justify-content-end gap-2">
-            {% if client.requirement == "Sell" %}
-                <a href="/client/{{ client.id }}/buyer-matches" class="btn btn-sm btn-outline-dark">
-                    Show Interested Buyers
-                </a>
-            {% elif client.requirement in ["Rent", "Buy"] %}
-                <a href="/client/{{ client.id }}/matches" class="btn btn-sm btn-outline-dark">
-                    Show Matches
-                </a>
-            {% endif %}
-
-            <a href="/edit-client/{{ client.id }}"
-            class="btn btn-sm btn-outline-dark">
-                Edit
-            </a>
-
-            <form method="POST" action="/client/{{ client.id }}/delete"
-                  onsubmit="return confirm('Are you sure?');">
-                <button class="btn btn-sm btn-outline-danger">
-                    Delete
-                </button>
-            </form>
-
-        </div>
-
-
-    </div>
-</div>
-{% endfor %}
+{% include "partials/clients/_control_zone.html" %}
+{% include "partials/clients/_inventory_zone.html" %}
 
 {% endblock %}

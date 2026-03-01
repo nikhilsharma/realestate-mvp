@@ -1,0 +1,11 @@
+{% if clients %}
+<div class="row">
+  {% for client in clients %}
+    {% include "partials/clients/_client_card.html" %}
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center text-muted mt-5">
+    No clients yet.
+</div>
+{% endif %}

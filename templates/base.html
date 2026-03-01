@@ -18,10 +18,30 @@
     <a class="navbar-brand fw-semibold" href="/">
         🏢 Urban Bricks & Bonds
     </a>
+
     {% if session.get("logged_in") %}
-        <a href="/" class="btn btn-sm btn-outline-light me-2">Properties</a>
-        <a href="/clients" class="btn btn-sm btn-outline-light me-2">Clients</a>
-        <a href="/logout" class="btn btn-sm btn-outline-light">Logout</a>
+        <div class="d-flex align-items-center gap-2">
+
+            <a href="/" 
+               class="btn btn-sm {% if request.path == '/' %}btn-light text-dark{% else %}btn-outline-light{% endif %}">
+                Dashboard
+            </a>
+
+            <a href="/properties" 
+               class="btn btn-sm {% if request.path.startswith('/properties') %}btn-light text-dark{% else %}btn-outline-light{% endif %}">
+                Properties
+            </a>
+
+            <a href="/clients" 
+               class="btn btn-sm {% if request.path.startswith('/clients') %}btn-light text-dark{% else %}btn-outline-light{% endif %}">
+                Clients
+            </a>
+
+            <a href="/logout" class="btn btn-sm btn-outline-light">
+                Logout
+            </a>
+
+        </div>
     {% endif %}
 </nav>
 

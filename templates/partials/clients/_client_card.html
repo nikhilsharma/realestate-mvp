@@ -1,0 +1,72 @@
+<div class="col-12 col-md-6 mb-3">
+  <div class="card shadow-sm 
+  {% if client.lead_temperature == 'hot' %}border-danger{% endif %}
+  {% if not client.is_active %}opacity-50{% endif %}"
+  >
+    <div class="card-body">
+
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="fw-semibold mb-0 text-truncate">
+          {{ client.name }}
+        </h6>
+
+        {% include "partials/clients/_client_lead_badge.html" %}
+      </div>
+
+      <!-- Contact -->
+      <div class="text-muted small mb-1">
+        <a href="tel:{{ client.contact }}" class="text-decoration-none">
+          📞 {{ client.contact }}
+        </a>
+      </div>
+
+      {% if client.profession %}
+      <div class="small text-muted mb-2">
+        Profession: {{ client.profession }}
+      </div>
+      {% endif %}
+
+      <!-- Requirement -->
+      <div class="mb-1">
+        {{ client.requirement }} | {{ client.property_type }}
+      </div>
+
+      <!-- Location -->
+      <div class="small text-muted mb-1">
+        📍 {{ client.location }}
+      </div>
+
+      <!-- Budget -->
+      <div class="fw-semibold mb-2">
+        ₹ {{ "{:,}".format(client.budget) }}
+      </div>
+
+      <hr class="my-2">
+
+      <!-- Followup -->
+      <div class="small text-muted">
+        Follow-up:
+        {{ client.followup_date.strftime("%d-%m-%Y") if client.followup_date else "-" }}
+      </div>
+
+      <!-- Next Action -->
+      {% if client.next_action %}
+      <div class="small mt-2">
+        <strong>Next:</strong> {{ client.next_action }}
+      </div>
+      {% endif %}
+
+      {% if client.notes %}
+      <div class="small text-muted mt-1">
+        {{ client.notes[:120] }}{% if client.notes|length > 120 %}...{% endif %}
+      </div>
+      {% endif %}
+
+      <hr class="my-2">
+
+      {% include "partials/clients/_client_actions.html" %}
+
+    </div>
+  </div>
+</div>

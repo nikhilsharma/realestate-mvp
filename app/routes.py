@@ -1,9 +1,10 @@
 from flask import render_template, request, redirect, session
 from config import Config
 from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property, soft_delete_property, restore_property_by_id
-from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller, soft_delete_client
+from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller, soft_delete_client, get_clients_filtered
 from app.utils import parse_client_form, parse_property_form
-from app.services.request_utils import extract_filters
+from app.services.request_utils import extract_filters, extract_client_filters, extract_property_filters
+from app.services.dashboard_service import build_dashboard_context
 
 def register_routes(app):
 
@@ -11,17 +12,52 @@ def register_routes(app):
     def dashboard():
         if not session.get("logged_in"):
             return redirect("/login")
-        
-        filters = extract_filters(request)
-        properties = get_properties(**filters)
-        
-        followups = get_followups_today()
+
+        dashboard_data = build_dashboard_context()
+
         return render_template(
-            "dashboard.html", 
+            "dashboard.html",
+            **dashboard_data
+        )
+    
+    @app.route("/clients/followups")
+    def clients_followups():
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        followups = get_followups_today()
+
+        return render_template(
+            "clients.html",
+            clients=followups,
+            page_title="Followups Today"
+        )
+    
+    @app.route("/properties")
+    def properties():
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        filters = extract_property_filters(request)
+        properties = get_properties(**filters)
+
+        return render_template(
+            "properties.html",
             properties=properties,
-            followups=followups,
             **filters
         )
+
+    @app.route("/property/<int:property_id>")
+    def property_detail(property_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        property = get_property_by_id(property_id)
+
+        if not property:
+            return "Property not found", 404
+
+        return render_template("property_detail.html", property=property)
 
     @app.route("/add-property", methods=["GET", "POST"])
     def add_property():
@@ -68,8 +104,12 @@ def register_routes(app):
         if not session.get("logged_in"):
             return redirect("/login")
 
-        clients = get_all_clients()
-        return render_template("clients.html", clients=clients)
+        filters = extract_client_filters(request)
+        clients = get_clients_filtered(**filters)
+
+        return render_template("clients.html", 
+                               clients=clients,
+                               **filters)
 
     @app.route("/add-client", methods=["GET", "POST"])
     def add_client():

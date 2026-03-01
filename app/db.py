@@ -91,6 +91,13 @@ def init_db():
     ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT TRUE
     """)
 
+    cursor.execute("""
+    ALTER TABLE clients
+    ADD COLUMN IF NOT EXISTS lead_score INTEGER DEFAULT 0,
+    ADD COLUMN IF NOT EXISTS lead_temperature VARCHAR(10) DEFAULT 'cold',
+    ADD COLUMN IF NOT EXISTS last_contacted_at TIMESTAMP NULL;
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

@@ -1,0 +1,20 @@
+<div class="card shadow-sm p-3 mb-4 position-relative filter-card">
+
+  <!-- Spinner -->
+  <div class="filter-spinner position-absolute top-50 start-50 translate-middle d-none">
+      <div class="spinner-border spinner-border-sm text-dark"></div>
+  </div>
+
+  <form method="GET" class="auto-submit-filters">
+
+    {% include "partials/properties/_search.html" %}
+    {% include "partials/properties/_filters.html" %}
+
+    <div class="text-end mt-2">
+      <a href="/properties" class="btn btn-sm btn-outline-dark">
+        Clear Filters
+      </a>
+    </div>
+
+  </form>
+</div>

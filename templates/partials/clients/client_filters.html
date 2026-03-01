@@ -1,0 +1,56 @@
+<!-- Lead Temperature -->
+<div class="mb-4">
+    <div class="small text-muted mb-1">Lead Temperature</div>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+
+        {% for temp, label, color in [
+            ('hot','Hot','danger'),
+            ('warm','Warm','warning'),
+            ('cold','Cold','secondary')
+        ] %}
+
+            <input type="checkbox"
+                   class="btn-check"
+                   name="lead_temperature"
+                   value="{{ temp }}"
+                   id="temp-{{ temp }}"
+                   {% if temp in (lead_temperature or []) %}checked{% endif %}>
+
+            <label class="btn btn-sm {% if temp in (lead_temperature or []) %}btn-{{ color }}{% else %}btn-outline-{{ color }}{% endif %}"
+                   for="temp-{{ temp }}">
+                {{ label }}
+            </label>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+<!-- Records -->
+<div class="mb-4">
+    <div class="small text-muted mb-1">Records</div>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+
+        {% for val, label, color in [
+            ('true','Active','primary'),
+            ('false','Archived','danger')
+        ] %}
+
+            <input type="checkbox"
+                   class="btn-check"
+                   name="is_active"
+                   value="{{ val }}"
+                   id="record-{{ val }}"
+                   {% if val in is_active %}checked{% endif %}>
+
+            <label class="btn btn-sm {% if val in is_active %}btn-{{ color }}{% else %}btn-outline-{{ color }}{% endif %}"
+                   for="record-{{ val }}">
+                {{ label }}
+            </label>
+
+        {% endfor %}
+
+    </div>
+</div>
+
+</form>
