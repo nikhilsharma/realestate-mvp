@@ -1,17 +1,3 @@
-Perfect. This is a very professional step.
-
-A `PROJECT_STATE.md` helps you:
-
-* Understand current system status
-* Resume work after break
-* Onboard partners
-* Avoid forgetting architecture decisions
-* Prevent regressions
-
-Below is a clean, structured version tailored to your current project.
-
-You can create a file in your root directory:
-
 ```
 PROJECT_STATE.md
 ```

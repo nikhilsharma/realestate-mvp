@@ -1,12 +1,6 @@
+---
+
 # 📄 ROADMAP.md
-
-Create:
-
-```
-ROADMAP.md
-```
-
-Paste:
 
 ---
 
@@ -14,79 +8,125 @@ Paste:
 
 ---
 
-# 🎯 Phase 1 – Stable Broker Tool (Current)
+# 🎯 Phase 1 – Structured Broker CRM (Completed)
 
 ✔ Property CRUD
 ✔ Client CRUD
 ✔ Matching logic
 ✔ WhatsApp share
-✔ Lifecycle management
-✔ Filter system
+✔ Lifecycle management (Active / Closed / Archived)
 ✔ Restore functionality
-✔ Modular template structure
+✔ Unified multi-select filter system
+✔ Dashboard separation
+✔ Property detail view (read-only)
+✔ Lead scoring + temperature classification
+✔ Modular template architecture
+✔ Service-layer based business logic
 
-Status: Stable for daily use.
+Status:
+Stable, structured, production-usable for small broker operations.
+
+System now behaves like a lightweight CRM, not just an MVP.
 
 ---
 
-# 🚀 Phase 2 – Business Intelligence Upgrade
+# 🚀 Phase 2 – Operational Intelligence Upgrade (Current Focus)
 
-### 🔥 Hot Leads System
+## 🔥 Lead Intelligence Enhancements
 
-* Mark client as Hot
-* Auto-detect high priority
-* Highlight on dashboard
-* Sort by urgency
+* Improve scoring algorithm
+* Score decay based on inactivity
+* Auto-prioritize based on follow-up urgency
+* Overdue followups detection
+* Match count badge on client cards
+* Auto-recommend matching properties
 
-### 🔥 Dashboard Enhancements
+## 📊 Dashboard Enhancements
 
-* Total inventory count
-* Active clients count
-* Follow-ups due today count
 * Sold this month count
+* Rented this month count
+* Active clients count
+* Overdue followups section
+* Quick-call shortcuts
+* Performance optimization (COUNT queries instead of full fetch)
+
+Goal:
+Turn dashboard into a true control center.
 
 ---
 
-# 🧑‍🤝‍🧑 Phase 3 – Multi-User System
+# ⚙️ Phase 3 – Scalability & Performance
+
+* Pagination (properties & clients)
+* Sorting (Budget / Date / Location)
+* Advanced filters:
+
+  * Budget range
+  * Area range
+* Search improvements (location + dealer + owner)
+* Index optimization for PostgreSQL
+* Query performance tuning
+* Bulk actions (archive multiple)
+
+Goal:
+Ensure performance beyond 500–1000 records.
+
+---
+
+# 🧑‍🤝‍🧑 Phase 4 – Multi-User System
 
 * Multiple login accounts
-* Role-based access
+* Role-based access control
 * Broker vs Partner access
-* Audit logs
+* Audit logs (who changed what)
+* User ownership of properties/clients
 
-Future:
+Future direction:
 
-* Multi-tenant SaaS version
+* Multi-tenant SaaS model
 
----
-
-# 📊 Phase 4 – Scaling Features
-
-* Pagination
-* Sorting (Budget / Date / Location)
-* Advanced area filter (min/max)
-* Advanced budget slider
-* CSV export
-* Backup system
+Goal:
+Move from single-user CRM → collaborative tool.
 
 ---
 
-# 🌐 Phase 5 – SaaS Version
+# 📦 Phase 5 – Business Automation
+
+* Property image upload
+* Client detail page
+* Activity history log
+* Follow-up reminders system
+* Auto WhatsApp reminders
+* Export to CSV
+* Basic analytics dashboard
+
+Goal:
+Reduce manual coordination and memory reliance.
+
+---
+
+# 🌐 Phase 6 – SaaS Version
 
 * Tenant-based architecture
-* Broker subscription plans
-* Cloud storage
-* Separate databases per tenant
+* Subscription plans
+* Cloud file storage
+* Per-tenant database separation
 * Custom branding
+
+Goal:
+Convert internal CRM into scalable SaaS.
 
 ---
 
-# 📱 Phase 6 – App Experience
+# 📱 Phase 7 – App Experience
 
 * PWA support
 * Installable mobile app
 * Offline caching
 * Push notifications for follow-ups
+
+Focus:
+Mobile-first broker workflow.
 
 ---
 
@@ -96,22 +136,38 @@ Urban Bricks & Bonds becomes:
 
 A lightweight CRM for small Indian brokers.
 
-Focus:
+Core Philosophy:
 
-* Simplicity
 * WhatsApp-first workflows
-* Mobile-friendly
-* No complex training needed
+* Minimal training required
+* Fast filtering
+* Intelligent prioritization
+* Clean UI
+* Low maintenance
 
 ---
 
 # 🧭 Strategic Direction
 
 Avoid feature bloat.
+
 Prioritize:
 
 * Speed
 * Usability
+* Operational clarity
 * Business impact
+* Architecture cleanliness
+
+---
+
+# 🔍 Immediate Next Recommended Step
+
+One of the following:
+
+1. Pagination system (most practical)
+2. Overdue followups section (high business value)
+3. Match count badge on client cards (high UX value)
+4. Query optimization for dashboard stats
 
 ---

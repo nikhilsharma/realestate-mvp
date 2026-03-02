@@ -1,246 +1,230 @@
-# 📄 ARCHITECTURE.md
+# Urban Bricks & Bonds – Architecture Overview
 
-Create:
+## 1. System Philosophy
 
-```
-ARCHITECTURE.md
-```
+This application follows a:
 
-Paste:
+- Server-rendered Flask architecture
+- Modular template composition
+- Clear separation of:
+  - Full pages
+  - Reusable partials
+  - Business logic
+  - Query builders
+  - Services
 
----
-
-# 🏗 Urban Bricks & Bonds – Architecture Document
-
----
-
-## 1️⃣ System Overview
-
-Urban Bricks & Bonds is a lightweight CRM designed for small real estate brokers operating in Delhi NCR.
-
-It manages:
-
-* Property Inventory
-* Clients (Buyers / Sellers / Renters)
-* Matching logic
-* Lifecycle (Available / Sold / Archived)
-* WhatsApp property sharing
+Mobile-first UI design.
 
 ---
 
-## 2️⃣ Technology Stack
+## 2. Routing Structure
 
-| Layer    | Technology         |
-| -------- | ------------------ |
-| Backend  | Flask              |
-| Database | PostgreSQL (Neon)  |
-| Hosting  | Render             |
-| Frontend | Bootstrap 5        |
-| Language | Python 3           |
-| ORM      | Raw SQL (psycopg2) |
+### Core Routes
 
----
-
-## 3️⃣ High-Level Architecture
-
-```
-Browser
-   ↓
-Flask Routes
-   ↓
-Service Layer (Business Logic)
-   ↓
-Model Layer (SQL + DB Access)
-   ↓
-PostgreSQL (Neon)
-```
+| Route | Purpose |
+|--------|----------|
+| `/` | Dashboard (Operational overview) |
+| `/properties` | Property Inventory Page |
+| `/property/<id>` | Property Detail View |
+| `/edit-property/<id>` | Edit Property |
+| `/clients` | Clients Page (Filter-driven) |
+| `/clients/followups` | Followups Today Workflow |
 
 ---
 
-## 4️⃣ Application Structure
-
-```
-app/
-│
-├── __init__.py
-├── db.py
-├── routes.py
-│
-├── models/
-│    ├── property_model.py
-│    └── client_model.py
-│
-├── services/
-│    ├── matching.py
-│    ├── seller_matching.py
-│    ├── location_utils.py
-│    ├── query_builder.py
-│    └── request_utils.py
-│
-├── templates/
-│    ├── dashboard.html
-│    ├── clients.html
-│    └── partials/
-│         ├── property_card.html
-│         ├── property_status_badge.html
-│         ├── property_actions.html
-│         └── property_share_button.html
-│
-└── static/
-     ├── css/
-     └── js/
-```
-
----
-
-## 5️⃣ Layer Responsibilities
+## 3. Layered Architecture
 
 ### Routes Layer
-
-* Handles HTTP
-* Extracts request data
-* Calls model/service functions
-* Renders templates
-* Should remain thin
-
----
-
-### Model Layer
-
-* Executes SQL
-* Maps rows to dictionaries
-* Contains no business logic
-
----
+- Minimal logic
+- Delegates to services
+- Passes context to templates
 
 ### Service Layer
+- `dashboard_service.py`
+- `request_utils.py`
+- `matching.py`
+- `query_builder.py`
 
-Contains business rules such as:
+Handles:
+- Context building
+- Filter extraction
+- Scoring refresh
+- Query assembly
 
-* Location normalization
-* Buyer/Seller matching
-* Filter query building
-* Request parsing
+### Model Layer
+- `property_model.py`
+- `client_model.py`
 
-This layer isolates complexity.
-
----
-
-## 6️⃣ Database Design
-
-### Properties Table
-
-| Column              | Purpose                  |
-| ------------------- | ------------------------ |
-| id                  | Primary key              |
-| type                | Residential / Commercial |
-| mode                | Rent / Sale              |
-| location            | Raw location             |
-| location_normalized | Matching logic           |
-| budget              | Integer                  |
-| area                | Sq ft                    |
-| owner_name          | Optional                 |
-| owner_contact       | Optional                 |
-| dealer_name         | Optional                 |
-| dealer_contact      | Optional                 |
-| video_link          | Optional                 |
-| status              | Available / Closed       |
-| is_active           | Soft delete              |
-| created_at          | Timestamp                |
+Responsible only for:
+- DB queries
+- Data formatting
 
 ---
 
-### Clients Table
+## 4. Template Structure
+# Urban Bricks & Bonds – Architecture Overview
 
-| Column              | Purpose                  |
-| ------------------- | ------------------------ |
-| id                  | Primary key              |
-| name                | Client name              |
-| contact             | Phone                    |
-| requirement         | Rent / Buy / Sell        |
-| property_type       | Residential / Commercial |
-| location            | Raw                      |
-| location_normalized | Matching                 |
-| budget              | Integer                  |
-| followup_date       | Date                     |
-| status              | Active                   |
-| notes               | Free text                |
-| next_action         | Short instruction        |
-| profession          | Useful for rentals       |
-| is_active           | Soft delete              |
-| created_at          | Timestamp                |
+## 1. System Philosophy
+
+This application follows a:
+
+- Server-rendered Flask architecture
+- Modular template composition
+- Clear separation of:
+  - Full pages
+  - Reusable partials
+  - Business logic
+  - Query builders
+  - Services
+
+Mobile-first UI design.
 
 ---
 
-## 7️⃣ Lifecycle Model
+## 2. Routing Structure
 
-Property:
+### Core Routes
 
-```
-Available → Sold → Archived → Restore
-```
-
-Client:
-
-```
-Active → Archived → Restore
-```
-
-Archived ≠ Sold
-Archived = Soft deleted record
+| Route | Purpose |
+|--------|----------|
+| `/` | Dashboard (Operational overview) |
+| `/properties` | Property Inventory Page |
+| `/property/<id>` | Property Detail View |
+| `/edit-property/<id>` | Edit Property |
+| `/clients` | Clients Page (Filter-driven) |
+| `/clients/followups` | Followups Today Workflow |
 
 ---
 
-## 8️⃣ Matching Strategy
+## 3. Layered Architecture
 
-Buyer → Properties:
+### Routes Layer
+- Minimal logic
+- Delegates to services
+- Passes context to templates
 
-* Mode match
-* Type match
-* Budget ±10%
-* Location normalized matching
+### Service Layer
+- `dashboard_service.py`
+- `request_utils.py`
+- `matching.py`
+- `query_builder.py`
 
-Seller → Buyers:
+Handles:
+- Context building
+- Filter extraction
+- Scoring refresh
+- Query assembly
 
-* Reverse match
-* Filtering done partially in Python
+### Model Layer
+- `property_model.py`
+- `client_model.py`
 
----
-
-## 9️⃣ Security
-
-* Session-based login
-* Environment variables for secrets
-* Database URL via Render secrets
-* No hardcoded credentials
-
----
-
-## 🔟 Scalability Notes
-
-Current design supports:
-
-* ~500 properties comfortably
-* ~1000 clients comfortably
-
-Future scaling improvements:
-
-* Pagination
-* Index on location_normalized
-* Multi-user system
-* Role-based access
-* Tenant separation (multi-broker SaaS)
+Responsible only for:
+- DB queries
+- Data formatting
 
 ---
 
-# 📌 Architecture Status
+## 4. Template Structure
+templates/
+│
+├── base.html
+├── dashboard.html
+├── properties.html
+├── property_detail.html
+├── edit_property.html
+├── clients.html
+│
+└── partials/
+├── dashboard/
+├── properties/
+├── clients/
 
-Current system is:
 
-* Modular
-* Maintainable
-* Extensible
-* Suitable for single broker usage
-* Ready for SaaS evolution
+### Rule
+
+- Full page → extends `base.html`
+- Partial → never extends base
+- Components reused wherever possible
 
 ---
+
+## 5. Filtering System Design
+
+### Properties
+
+Supports multi-select filtering for:
+- Mode (Rent, Sale)
+- Status (Available, Closed)
+- Record state (Active, Archived)
+- Search (location + owner)
+
+Query builder uses:
+- `build_in_filter()`
+- Dynamic WHERE clause assembly
+
+---
+
+### Clients
+
+Supports multi-select filtering for:
+- Lead temperature (Hot, Warm, Cold)
+- Record state (Active, Archived)
+- Search (name + location + profession)
+
+Followups is a dedicated workflow route, not just a filter.
+
+---
+
+## 6. Lead Intelligence
+
+Lead scoring is controlled by constants:
+
+- HOT_LEAD_THRESHOLD
+- WARM_LEAD_THRESHOLD
+- Budget matching multipliers
+
+Matching logic lives in:
+`matching.py`
+
+No hardcoded values inside query layer.
+
+---
+
+## 7. UI Architecture
+
+Dashboard is split into:
+
+- Stats Zone
+- Priority Zone (Hot Leads + Followups)
+- Recent Properties
+- Quick Navigation
+
+Properties and Clients use consistent:
+
+- Control Zone (Filters + Search)
+- Inventory Zone (Cards Grid)
+
+---
+
+## 8. Reusability Principles
+
+- `property_status_badge` reused everywhere
+- `property_actions` reused on cards & detail page
+- Shared filter CSS
+- Shared spinner behavior
+
+No duplication of business logic in templates.
+
+---
+
+## 9. Future Scalability
+
+System is structured to support:
+
+- Pagination
+- Image uploads
+- Client detail pages
+- Match count badges
+- Overdue followups
+- Analytics dashboard
