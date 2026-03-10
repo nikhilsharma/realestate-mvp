@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Broker Property{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <h4 class="mb-3">Edit Broker Property</h4>
+
+                <form method="POST">
+
+                    <!-- Property Type -->
+                    <div class="mb-3">
+                        <label class="form-label">Property Type</label>
+                        <select name="type" class="form-select" required>
+                            <option value="Residential"
+                                {% if property.type == "Residential" %}selected{% endif %}>
+                                Residential
+                            </option>
+                            <option value="Commercial"
+                                {% if property.type == "Commercial" %}selected{% endif %}>
+                                Commercial
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- configuration -->
+                    {% set name = "configuration" %}
+                    {% set selected = property.configuration if property else None %}
+                    {% set mode = "single" %}
+                    {% include "partials/_configuration.html" %}
+
+                    <!-- Mode -->
+                    <div class="mb-3">
+                        <label class="form-label">Mode</label>
+                        <select name="mode" class="form-select" required>
+                            <option value="Rent"
+                                {% if property.mode == "Rent" %}selected{% endif %}>
+                                Rent
+                            </option>
+                            <option value="Sale"
+                                {% if property.mode == "Sale" %}selected{% endif %}>
+                                Sale
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Area Cluster -->
+                    {% set name = "area_cluster" %}
+                    {% set selected = property.area_cluster if property else None %}
+                    {% set mode = "single" %}
+                    {% include "partials/_area_cluster.html" %}
+
+                    <!-- Location -->
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input name="location" class="form-control"
+                               value="{{ property.location }}" required>
+                    </div>
+
+                    <!-- Budget -->
+                    <div class="mb-3">
+                        <label class="form-label">Budget</label>
+                        <input type="number" name="budget" class="form-control"
+                               value="{{ property.budget }}" required>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-3">
+                        <label class="form-label">Tags</label>
+                        
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for tag in tags %}
+                                    <input class="btn-check"
+                                            type="checkbox"
+                                            id="tag_{{ loop.index }}"
+                                            name="tags"
+                                            value="{{ tag }}"
+                                            {% if property.tags and tag in property.tags %} checked {% endif %} >
+                                    
+                                    <label class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1"
+                                            for="tag_{{ loop.index }}">
+                                        {{ tag }}
+                                    </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Video -->
+                    <div class="mb-3">
+                        <label class="form-label">Video Link</label>
+                        <input type="url" name="video_link" class="form-control"
+                               value="{{ property.video_link or '' }}">
+                    </div>
+
+                    <hr>
+                    <h6 class="mt-3">Broker Details</h6>
+
+                    <!-- Broker Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Broker Name</label>
+                        <input name="broker_name" class="form-control"
+                               value="{{ property.broker_name or '' }}">
+                    </div>
+
+                    <!-- Broker Contact -->
+                    <div class="mb-3">
+                        <label class="form-label">Broker Contact</label>
+                        <input name="broker_contact" class="form-control"
+                               value="{{ property.broker_contact or '' }}">
+                    </div>
+
+                    <!-- Availability -->
+                    <div class="mb-3">
+                        <label class="form-label">Availability</label>
+                        <select name="is_available" class="form-select">
+                            <option value="true"
+                                {% if property.is_available %}selected{% endif %}>
+                                Available
+                            </option>
+                            <option value="false"
+                                {% if not property.is_available %}selected{% endif %}>
+                                Not Available
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Last Confirmed -->
+                    <div class="mb-3">
+                        <label class="form-label">Last Confirmed Date</label>
+                        <input type="date" name="last_confirmed_at"
+                               class="form-control"
+                               value="{{ property.last_confirmed_at or today }}">
+                    </div>
+
+                    <div class="d-flex gap-2">
+
+                        <button class="btn btn-dark w-100">
+                            Update Broker Property
+                        </button>
+
+                        <a href="/broker-properties"
+                           class="btn btn-outline-secondary w-100">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

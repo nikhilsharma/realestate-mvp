@@ -1,0 +1,96 @@
+<div class="col-12 col-md-6 mb-3">
+  <div class="card shadow-sm {{ property.freshness_border }} {% if not property.is_available %}opacity-50{% endif %}">
+    <div class="card-body">
+
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="fw-bold mb-0">
+          ₹ {{ property.budget }} 
+          
+          {% if property.configuration %}
+          <span class="text-muted fw-normal">
+            • {{ property.configuration }}
+          </span>
+          {% endif %}
+
+          <!-- Mode -->
+          {% if property.mode %}
+            <span class="text-muted fw-normal">
+              • {{ property.mode }}
+            </span>
+          {% endif %}
+        </h6>
+
+        {% if property.last_confirmed_at %}
+            {% if property.freshness == "fresh" %}
+                <span class="badge bg-success">Fresh</span>
+
+                {% elif property.freshness == "aging" %}
+                <span class="badge bg-warning text-dark">Aging</span>
+
+                {% elif property.freshness == "stale" %}
+                <span class="badge bg-danger">Stale</span>
+            {% endif %}
+        {% endif %}
+      </div>
+
+      <!-- Area Cluster and location -->
+      <div class="text-muted small mb-2">
+        📍<strong>{{ property.area_cluster }}</strong>  - {{ property.location }}
+      </div>
+
+      <!-- Property Type -->
+      {% if property.type %}
+      <div class="small text-muted mb-2">
+        {{ property.type }}
+      </div>
+      {% endif %}
+
+      <!-- Broker -->
+      <div class="small mb-2">
+        👤 {{ property.broker_name or "Unknown Broker" }}
+      </div>
+
+      {% if property.days_since_confirm is not none %}
+      <div class="small text-muted">
+        Confirmed {{ property.days_since_confirm }} day{% if property.days_since_confirm != 1 %}s{% endif %} ago
+      </div>
+      {% endif %}
+
+      {% if property.broker_contact %}
+      <div class="small text-muted mb-2">
+        <a href="tel:{{ property.broker_contact }}">
+        📞 {{ property.broker_contact }}
+        </a>
+      </div>
+      {% endif %}
+
+      <!-- Tags -->
+      {% if property.tags %}
+      <div class="mb-2">
+        {% for tag in property.tags %}
+          <span class="badge bg-light border text-secondary">
+            {{ tag }}
+          </span>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <!-- Video -->
+      {% if property.video_link %}
+      <div class="mb-2">
+        <a href="{{ property.video_link }}"
+           target="_blank"
+           class="btn btn-sm btn-outline-success">
+           🎥 Video
+        </a>
+      </div>
+      {% endif %}
+
+      <hr>
+
+      {% include "partials/broker_properties/_broker_actions.html" %}
+
+    </div>
+  </div>
+</div>

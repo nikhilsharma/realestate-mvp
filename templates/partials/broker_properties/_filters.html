@@ -1,0 +1,73 @@
+<!-- Area Cluster -->
+{% set name = "area_cluster" %}
+{% set selected = request.args.getlist("area_cluster") %}
+{% set mode = "multi" %}
+
+{% include "partials/_area_cluster.html" %}
+
+<!-- Configuration -->
+{% set name = "configuration" %}
+{% set selected = request.args.getlist("configuration") %}
+{% set mode = "multi" %}
+
+{% include "partials/_configuration.html" %}
+
+<!-- Tags -->
+{% include "partials/_tags.html" %}
+
+<!-- Mode -->
+<div class="mb-3">
+    <div class="small text-muted mb-1">Mode</div>
+    <div class="d-flex flex-wrap gap-2">
+        {% for m in ["Rent", "Sale"] %}
+            <input type="checkbox"
+                   class="btn-check"
+                   name="mode"
+                   value="{{ m }}"
+                   id="mode-{{ loop.index }}"
+                   {% if m in modes %}checked{% endif %}>
+            <label class="btn btn-sm btn-outline-primary"
+                   for="mode-{{ loop.index }}">
+                {{ m }}
+            </label>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Freshness -->
+<div class="mb-3">
+    <div class="small text-muted mb-1">Freshness</div>
+    <div class="d-flex flex-wrap gap-2">
+        {% for f in ["fresh", "aging", "stale"] %}
+            <input type="checkbox"
+                   class="btn-check"
+                   name="freshness"
+                   value="{{ f }}"
+                   id="fresh-{{ loop.index }}"
+                   {% if f in freshness %}checked{% endif %}>
+            <label class="btn btn-sm btn-outline-success"
+                   for="fresh-{{ loop.index }}">
+                {{ f.capitalize() }}
+            </label>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Availability -->
+<div class="mb-3">
+    <div class="small text-muted mb-1">Availability</div>
+    <div class="d-flex flex-wrap gap-2">
+        {% for a in ["true", "false"] %}
+            <input type="checkbox"
+                   class="btn-check"
+                   name="is_available"
+                   value="{{ a }}"
+                   id="avail-{{ loop.index }}"
+                   {% if a in is_available %}checked{% endif %}>
+            <label class="btn btn-sm btn-outline-secondary"
+                   for="avail-{{ loop.index }}">
+                {{ "Available" if a == "true" else "Unavailable" }}
+            </label>
+        {% endfor %}
+    </div>
+</div>

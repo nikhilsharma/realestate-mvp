@@ -1,0 +1,30 @@
+<div class="mb-3">
+<label class="form-label">Area Cluster</label>
+<div class="d-flex flex-wrap gap-2">
+
+    {% for area in all_area_clusters %}
+
+        <input 
+              type="{{ 'radio' if mode == 'single' else 'checkbox' }}"
+               class="btn-check"
+               name="{{ name }}"
+               id="{{ name }}-{{ area | replace(' ', '-') | lower }}"
+               value="{{ area }}"
+               
+               {% if mode == 'single' and selected == area %}
+                    checked
+                {% endif %}
+
+                {% if mode == 'multi' and selected and area in selected %}
+                    checked
+                {% endif %}>
+
+        <label class="btn btn-outline-dark btn-sm rounded-pill px-3 py-2"
+               for="{{ name }}-{{ area | replace(' ', '-') | lower }}">
+            {{ area }}
+        </label>
+
+    {% endfor %}
+
+</div>
+</div>

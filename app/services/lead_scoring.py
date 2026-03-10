@@ -1,6 +1,6 @@
 from datetime import date
-from app.config.constants import HOT_LEAD_THRESHOLD
-from app.config.constants import WARM_LEAD_THRESHOLD
+from app.settings.constants import HOT_LEAD_THRESHOLD
+from app.settings.constants import WARM_LEAD_THRESHOLD
 
 def calculate_lead_score(client, matching_properties_count):
     score = 0

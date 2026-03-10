@@ -1,7 +1,0 @@
-# Lead scoring thresholds
-HOT_LEAD_THRESHOLD = 60
-WARM_LEAD_THRESHOLD = 30
-
-# Budget tolerance multiplier
-BUDGET_LOWER_MULTIPLIER = 0.85
-BUDGET_UPPER_MULTIPLIER = 1.15

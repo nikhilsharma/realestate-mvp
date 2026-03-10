@@ -2,9 +2,16 @@ from flask import render_template, request, redirect, session
 from config import Config
 from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property, soft_delete_property, restore_property_by_id
 from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller, soft_delete_client, get_clients_filtered
-from app.utils import parse_client_form, parse_property_form
+from app.utils import parse_client_form, parse_property_form, parse_broker_property_form
 from app.services.request_utils import extract_filters, extract_client_filters, extract_property_filters
 from app.services.dashboard_service import build_dashboard_context
+from app.services.request_utils import extract_broker_filters
+from app.models.broker_property_model import get_broker_properties_filtered, get_broker_properties, get_broker_property_by_id
+from app.services.broker_property_service import add_broker_property
+from app.services.broker_visuals import decorate_broker_properties
+from app.models.broker_property_model import update_broker_property
+from app.settings.constants import BROKER_PROPERTY_TAGS, AREA_CLUSTERS, CONFIGURATIONS
+from datetime import date
 
 def register_routes(app):
 
@@ -219,6 +226,95 @@ def register_routes(app):
         
         restore_property_by_id(property_id)
         return redirect("/")
+    
+    @app.route("/broker-properties")
+    def broker_properties():
+        if not session.get("logged_in"):
+            return redirect("/login")
 
+        filters = extract_broker_filters(request)
+        broker_properties = get_broker_properties_filtered(**filters)
+        # broker_properties = get_broker_properties()
+        broker_properties = decorate_broker_properties(broker_properties)
 
+        print("FILTERS:", filters)
+        print("RESULT COUNT:", len(broker_properties))
 
+        return render_template(
+            "broker_properties.html",
+            properties=broker_properties,
+            all_area_clusters = AREA_CLUSTERS,
+            all_tags=BROKER_PROPERTY_TAGS,
+            all_configurations=CONFIGURATIONS,
+            **filters
+        )
+
+    @app.route("/broker-property/<int:property_id>/confirm", methods=["POST"])
+    def confirm_broker_property_route(property_id):
+
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        from app.services.broker_property_service import confirm_broker_listing
+
+        confirm_broker_listing(property_id)
+
+        return redirect(request.referrer or "/broker-properties")
+
+    @app.route("/broker-property/<int:property_id>/toggle-availability", methods=["POST"])
+    def toggle_broker_availability_route(property_id):
+
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        from app.services.broker_property_service import toggle_broker_listing
+
+        toggle_broker_listing(property_id)
+
+        return redirect(request.referrer or "/broker-properties")
+    
+    @app.route("/add-broker-property", methods=["GET", "POST"])
+    def add_broker_property_route():
+
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        if request.method == "POST":
+
+            data = parse_broker_property_form(request.form)
+            add_broker_property(data)
+
+            return redirect("/broker-properties")
+
+        return render_template(
+            "add_broker_property.html",
+            today=date.today().isoformat(),
+            tags = BROKER_PROPERTY_TAGS,
+            all_area_clusters = AREA_CLUSTERS,
+            all_configurations=CONFIGURATIONS
+            )
+    
+    @app.route("/edit-broker-property/<int:property_id>", methods=["GET", "POST"])
+    def edit_broker_property(property_id):
+
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        property = get_broker_property_by_id(property_id)
+
+        if not property:
+            return "Broker Property not found"
+
+        if request.method == "POST":
+            data = parse_broker_property_form(request.form)
+            update_broker_property(property_id, data)
+            return redirect("/broker-properties")
+
+        return render_template(
+            "edit_broker_property.html",
+            today=date.today().isoformat(),
+            property=property,
+            tags=BROKER_PROPERTY_TAGS,
+            all_area_clusters = AREA_CLUSTERS,
+            all_configurations=CONFIGURATIONS
+        )

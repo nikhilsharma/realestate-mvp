@@ -98,6 +98,30 @@ def init_db():
     ADD COLUMN IF NOT EXISTS last_contacted_at TIMESTAMP NULL;
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS broker_properties (
+            id SERIAL PRIMARY KEY,
+            area_cluster TEXT NOT NULL,
+            location TEXT NOT NULL,
+            location_normalized TEXT,
+            budget INTEGER NOT NULL,
+            mode TEXT CHECK (mode IN ('Rent','Sale')),
+            type TEXT DEFAULT 'Residential',
+            video_link TEXT,
+            broker_name TEXT,
+            broker_contact TEXT,
+            tags TEXT[],
+            is_available BOOLEAN DEFAULT TRUE,
+            last_confirmed_at DATE,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    cursor.execute("""
+    ALTER TABLE broker_properties
+    ADD COLUMN IF NOT EXISTS configuration TEXT
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

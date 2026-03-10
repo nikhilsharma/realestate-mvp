@@ -27,3 +27,16 @@ def extract_client_filters(request):
 
 def apply_default_record_filter(is_active):
     return is_active or ["true"]
+
+def extract_broker_filters(request):
+    tags = request.args.getlist("tags")
+    return {
+        "area_clusters": request.args.getlist("area_cluster"),
+        "configurations": request.args.getlist("configuration"),
+        "modes": request.args.getlist("mode"),
+        "freshness": request.args.getlist("freshness") or ["fresh", "aging"],
+        "is_available": request.args.getlist("is_available") or ["true"],
+        "search": request.args.get("search"),
+        "tags": tags,
+        "selected_tags": tags
+    }

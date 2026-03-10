@@ -1,0 +1,9 @@
+{% include "partials/broker_properties/_header.html" %}
+
+{% if properties %}
+    {% include "partials/broker_properties/_grid.html" %}
+{% else %}
+    <div class="text-center text-muted mt-5">
+        No broker listings found.
+    </div>
+{% endif %}

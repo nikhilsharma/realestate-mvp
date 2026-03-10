@@ -1,6 +1,6 @@
 from app.services.location_utils import extract_keywords
-from app.config.constants import BUDGET_LOWER_MULTIPLIER
-from app.config.constants import BUDGET_UPPER_MULTIPLIER
+from app.settings.constants import BUDGET_LOWER_MULTIPLIER
+from app.settings.constants import BUDGET_UPPER_MULTIPLIER
 
 
 def locations_match(seller_loc, buyer_loc):

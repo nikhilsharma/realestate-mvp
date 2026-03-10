@@ -1,0 +1,24 @@
+<!-- Tags -->
+<div class="mb-3">
+  <div class="small text-muted mb-2">Tags</div>
+
+  <div class="d-flex flex-wrap gap-2">
+
+    {% for tag in all_tags %}
+
+    <input
+      class="btn-check"
+      id="filter-tag-{{ loop.index }}"
+      type="checkbox"
+      name="tags"
+      value="{{ tag }}"
+      {% if tag in selected_tags %}checked{% endif %}>
+
+    <label
+      class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1"
+      for="filter-tag-{{ loop.index }}">
+      {{ tag }}
+    </label>
+    {% endfor %}
+  </div>
+</div>

@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}Add Broker Property{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-6">
+
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <h4 class="mb-3">Add Broker Property</h4>
+
+                <form method="POST">
+
+                    <!-- Property Type -->
+                    <div class="mb-3">
+                        <label class="form-label">Property Type</label>
+                        <div class="d-flex gap-2 flex-wrap">
+                            
+                            <input type="radio" class="btn-check" name="type" id="type-res" value="Residential" required>
+                            <label class="btn btn-outline-dark rounded-pill px-3" for="type-res">Residential</label>
+
+                            <input type="radio" class="btn-check" name="type" id="type-com" value="Commercial">
+                            <label class="btn btn-outline-dark rounded-pill px-3" for="type-com">Commercial</label>
+
+                        </div>
+                    </div>
+
+                    <!-- configuration -->
+                    {% set name = "configuration" %}
+                    {% set selected = property.configuration if property else None %}
+                    {% set mode = "single" %}
+                    {% include "partials/_configuration.html" %}
+
+                    <!-- Mode -->
+                    <div class="mb-3">
+                        <label class="form-label">Mode</label>
+
+                        <div class="d-flex gap-2 flex-wrap">
+
+                        <input type="radio" class="btn-check" name="mode" id="mode-rent" value="Rent" required>
+                        <label class="btn btn-outline-dark rounded-pill px-3" for="mode-rent">Rent</label>
+
+                        <input type="radio" class="btn-check" name="mode" id="mode-sale" value="Sale">
+                        <label class="btn btn-outline-dark rounded-pill px-3" for="mode-sale">Sale</label>
+
+                        </div>
+                    </div>
+
+                    <!-- Area Cluster -->
+                    {% set name = "area_cluster" %}
+                    {% set selected = property.area_cluster if property else None %}
+                    {% set mode = "single" %}
+                    {% include "partials/_area_cluster.html" %}
+
+                    <!-- Location -->
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input name="location" class="form-control" placeholder="e.g. A Block" required>
+                    </div>
+
+                    <!-- Budget -->
+                    <div class="mb-3">
+                        <label class="form-label">Budget</label>
+                        <input type="text"
+                            name="budget"
+                            id="budget_input"
+                            class="form-control" 
+                            placeholder="e.g. 85000"
+                            inputmode="numeric" required>
+                        
+                        <div class="form-text text-muted" id="budget_preview"></div>
+                    </div>
+
+                    <!-- Tags -->
+                    <div class="mb-3">
+                        <label class="form-label">Tags</label>
+                        
+                        <div class="d-flex flex-wrap gap-2">
+                            {% for tag in tags %}
+                                    <input class="btn-check"
+                                            id="tag_{{ loop.index }}"
+                                            type="checkbox"
+                                            name="tags"
+                                            value="{{ tag }}">
+                                    
+                                    <label class="btn btn-outline-primary btn-sm rounded-pill px-3 py-1"
+                                            for="tag_{{ loop.index }}">
+                                        {{ tag }}
+                                    </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Video -->
+                    <div class="mb-3">
+                        <label class="form-label">Video Link</label>
+                        <input type="url" name="video_link" class="form-control" placeholder="Drive / YouTube link">
+                    </div>
+
+                    <hr>
+                    <h6 class="mt-3">Broker Details</h6>
+
+                    <!-- Broker -->
+                     <details class="mb-3">
+                        <summary>Broker Details</summary>
+
+                        <div class="mt-3">
+
+                            <input name="broker_name" class="form-control mb-2" placeholder="Broker name">
+
+                            <input name="broker_contact" class="form-control" inputmode="numeric" placeholder="Broker phone">
+
+                        </div>
+
+                    </details>
+
+                    <!-- Availability -->
+                    <div class="mb-3">
+                        <label class="form-label">Availability</label>
+
+                        <div class="d-flex gap-2">
+
+                        <input type="radio" class="btn-check" name="is_available" id="av1" value="true" checked>
+                        <label class="btn btn-outline-success rounded-pill px-3" for="av1">Available</label>
+
+                        <input type="radio" class="btn-check" name="is_available" id="av2" value="false">
+                        <label class="btn btn-outline-danger rounded-pill px-3" for="av2">Not Available</label>
+
+                        </div>
+                    </div>
+
+                    <!-- Last Confirmed -->
+                    <div class="mb-3">
+                        <label class="form-label">Last Confirmed Date</label>
+                        <input type="date" 
+                            name="last_confirmed_at" 
+                            class="form-control"
+                            value="{{ today }}">
+                    </div>
+
+                    <button class="btn btn-dark w-100 py-3 fs-5">
+                        Save Broker Property
+                    </button>
+
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

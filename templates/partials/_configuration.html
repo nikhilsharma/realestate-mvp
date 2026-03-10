@@ -1,0 +1,36 @@
+<div class="mb-3">
+
+<label class="form-label">Configuration</label>
+
+<div class="d-flex flex-wrap gap-2">
+
+{% for config in all_configurations %}
+
+<input
+type="{{ 'radio' if mode == 'single' else 'checkbox' }}"
+class="btn-check"
+name="{{ name }}"
+id="{{ name }}-{{ config | replace(' ', '-') | lower }}"
+value="{{ config }}"
+
+{% if mode == 'single' and selected == config %}
+checked
+{% endif %}
+
+{% if mode == 'multi' and selected and config in selected %}
+checked
+{% endif %}
+>
+
+<label
+class="btn btn-outline-dark btn-sm rounded-pill px-3 py-2"
+for="{{ name }}-{{ config | replace(' ', '-') | lower }}"
+>
+{{ config }}
+</label>
+
+{% endfor %}
+
+</div>
+
+</div>
