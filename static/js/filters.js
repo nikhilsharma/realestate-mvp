@@ -1,5 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    // Collapse filters on mobile
+    if (window.innerWidth < 768) {
+        const panel = document.getElementById("filterPanel");
+        if (panel) {
+            panel.classList.remove("show");
+        }
+    }
+
     const filterForms = document.querySelectorAll(".auto-submit-filters");
 
     filterForms.forEach(form => {
