@@ -41,6 +41,22 @@ AREA_CLUSTERS = [
     "Subhash Nagar"
 ]
 
+AREA_CODES = {
+    "Janakpuri": "JP",
+    "Tilak Nagar": "TN",
+    "Mahavir Nagar": "MN",
+    "Uttam Nagar": "UN",
+    "Dwarka": "DW",
+    "Vikaspuri": "VP",
+    "Hari Nagar": "HN",
+    "Subhash Nagar": "SN"
+}
+
+PROPERTY_MODE_CODES = {
+    "Rent": "R",
+    "Sale": "S"
+}
+
 # Property Configurations
 CONFIGURATIONS = [
     "1RK",

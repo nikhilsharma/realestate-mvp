@@ -3,7 +3,6 @@ from app.db import get_db_connection
 from app.services.broker_query_builder import _build_broker_query
 from app.services.location_utils import normalize_location
 
-
 def create_broker_property(data):
     location_normalized = normalize_location(data.get("location"))
     conn = get_db_connection()
@@ -192,6 +191,21 @@ def update_broker_property(property_id, data):
         data["last_confirmed_at"],
         property_id
     ))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def update_whatsapp_ref(property_id, whatsapp_ref):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE broker_properties
+        SET whatsapp_video_ref = %s
+        WHERE id = %s
+    """, (whatsapp_ref, property_id))
 
     conn.commit()
     cursor.close()

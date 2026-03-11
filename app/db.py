@@ -122,6 +122,11 @@ def init_db():
     ADD COLUMN IF NOT EXISTS configuration TEXT
     """)
 
+    cursor.execute("""
+    ALTER TABLE broker_properties
+    ADD COLUMN IF NOT EXISTS whatsapp_video_ref TEXT;
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()
