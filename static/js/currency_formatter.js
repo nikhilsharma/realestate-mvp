@@ -1,21 +1,27 @@
-const budgetInput = document.getElementById("budget_input");
-const preview = document.getElementById("budget_preview");
+document.addEventListener("DOMContentLoaded", function () {
 
-budgetInput.addEventListener("input", function () {
+    const budgetInput = document.getElementById("budget_input");
+    const preview = document.getElementById("budget_preview");
 
-    let value = this.value.replace(/,/g, "").replace(/\D/g, "");
+    if (!budgetInput) return;
 
-    if (!value) {
-        preview.innerText = "";
-        return;
-    }
+    budgetInput.addEventListener("input", function () {
 
-    const number = parseInt(value);
+        let value = this.value.replace(/,/g, "").replace(/\D/g, "");
 
-    const formatted = new Intl.NumberFormat("en-IN").format(number);
+        if (!value) {
+            preview.innerText = "";
+            return;
+        }
 
-    this.value = formatted;
+        const number = parseInt(value);
 
-    preview.innerText = "₹ " + formatted;
+        const formatted = new Intl.NumberFormat("en-IN").format(number);
+
+        this.value = formatted;
+
+        preview.innerText = "₹ " + formatted;
+
+    });
 
 });

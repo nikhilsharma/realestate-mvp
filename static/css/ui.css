@@ -68,3 +68,12 @@
 .wa-ref-copy:active {
   background: #f1f3f5;
 }
+
+.filter-arrow {
+  font-size: 14px;
+  transition: transform 0.2s ease;
+}
+
+#filterToggle[aria-expanded="true"] .filter-arrow {
+  transform: rotate(180deg);
+}
