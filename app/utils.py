@@ -31,7 +31,8 @@ def parse_client_form(form):
         "followup_date": followup,
         "notes": form.get("notes"),
         "next_action": form.get("next_action"),
-        "profession": form.get("profession")
+        "profession": form.get("profession"),
+        "lead_temperature_override": form.get("lead_temperature_override")
     }
 
 def parse_broker_property_form(form):

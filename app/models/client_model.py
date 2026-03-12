@@ -131,7 +131,8 @@ def update_client(client_id, data):
             followup_date=%s,
             notes=%s,
             next_action=%s,                  
-            profession=%s
+            profession=%s,
+            lead_temperature_override=%s
         WHERE id=%s
     """, (
         data["name"],
@@ -145,6 +146,7 @@ def update_client(client_id, data):
         data["notes"],
         data["next_action"],
         data.get("profession"),
+        data.get("lead_temperature_override"),
         client_id
     ))
 

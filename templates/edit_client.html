@@ -67,6 +67,31 @@
                         <label class="form-label">Next Action</label>
                         <input name="next_action" class="form-control" value="{{ client.next_action }}">
                     </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Lead Temperature</label>
+
+                        <select name="lead_temperature_override" class="form-select">
+
+                            <option value="">Auto (System)</option>
+
+                            <option value="hot"
+                            {% if client.lead_temperature_override == "hot" %}selected{% endif %}>
+                            Hot
+                            </option>
+
+                            <option value="warm"
+                            {% if client.lead_temperature_override == "warm" %}selected{% endif %}>
+                            Warm
+                            </option>
+
+                            <option value="cold"
+                            {% if client.lead_temperature_override == "cold" %}selected{% endif %}>
+                            Cold
+                            </option>
+
+                        </select>
+                    </div>
                     
                     <div class="d-grid gap-2 mt-3">
                         <button type="submit" class="btn btn-dark">

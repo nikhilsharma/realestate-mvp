@@ -127,6 +127,11 @@ def init_db():
     ADD COLUMN IF NOT EXISTS whatsapp_video_ref TEXT;
     """)
 
+    cursor.execute("""
+    ALTER TABLE clients
+    ADD COLUMN IF NOT EXISTS lead_temperature_override TEXT
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

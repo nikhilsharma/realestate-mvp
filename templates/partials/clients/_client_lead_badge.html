@@ -1,13 +1,16 @@
-{% if client.lead_temperature == "hot" %}
+{% set effective_temp = client.lead_temperature_override or client.lead_temperature %}
+{% set manual = client.lead_temperature_override %}
+
+{% if effective_temp == "hot" %}
   <span class="badge bg-danger rounded-pill">
-    🔥 Hot ({{ client.lead_score }})
+    🔥 Hot {% if manual %}*{% endif %} ({{ client.lead_score }})
   </span>
-{% elif client.lead_temperature == "warm" %}
+{% elif effective_temp == "warm" %}
   <span class="badge bg-warning text-dark">
-    Warm ({{ client.lead_score }})
+    Warm {% if manual %}*{% endif %} ({{ client.lead_score }})
   </span>
 {% else %}
   <span class="badge bg-secondary">
-    Cold
+    Cold {% if manual %}*{% endif %}
   </span>
 {% endif %}

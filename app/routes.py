@@ -180,6 +180,7 @@ def register_routes(app):
 
         if request.method == "POST":
             data = parse_client_form(request.form)
+            print("Data to update client...",data)
             update_client(client_id, data)
             return redirect("/clients")
 

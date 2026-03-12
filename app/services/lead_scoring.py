@@ -38,9 +38,13 @@ def classify_temperature(score):
 
 def enrich_client_with_lead_data(client, matching_properties_count):
     score = calculate_lead_score(client, matching_properties_count)
-    temperature = classify_temperature(score)
+    auto_temperature = classify_temperature(score)
 
+    # Apply manual override if present
+    final_temperature = client.get("lead_temperature_override") or auto_temperature
+    
     client["lead_score"] = score
-    client["lead_temperature"] = temperature
+    client["lead_temperature"] = final_temperature
+    client["lead_temperature_auto"] = auto_temperature
 
     return client
