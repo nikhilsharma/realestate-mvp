@@ -1,4 +1,4 @@
-from app.models.broker_property_model import confirm_broker_property, toggle_broker_availability, create_broker_property, update_whatsapp_ref
+from app.models.broker_property_model import confirm_broker_property, toggle_broker_availability, create_broker_property, update_whatsapp_ref, get_broker_property_by_id as model_get_broker_property_by_id
 from app.settings.constants import AREA_CODES
 
 def confirm_broker_listing(property_id):
@@ -20,3 +20,6 @@ def _generate_whatsApp_code(data, new_id):
     rent_sale = data.get("mode","X")
     whatsapp_ref = f"UBB-BRK-{property_id_str}-{area_code}-{config}-{rent_sale}"
     return whatsapp_ref
+
+def get_broker_property_by_id(id):
+    return model_get_broker_property_by_id(id)

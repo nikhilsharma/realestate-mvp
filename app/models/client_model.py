@@ -213,7 +213,7 @@ def get_clients_by_temperature(temperature):
 
     cursor.execute("""
         SELECT * FROM clients
-        WHERE lead_temperature = %s
+        WHERE COALESCE(lead_temperature_override, lead_temperature) = %s
         AND is_active = TRUE
         ORDER BY lead_score DESC, created_at DESC
     """, (temperature,))

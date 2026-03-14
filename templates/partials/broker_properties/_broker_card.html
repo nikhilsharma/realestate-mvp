@@ -3,6 +3,8 @@
     class="card shadow-sm {{ property.freshness_border }} {% if not property.is_available %}opacity-50{% endif %}"
   >
     <div class="card-body">
+      <a href="/broker-property/{{ property.id }}" 
+          class="text-decoration-none text-dark">
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center mb-2">
         <h6 class="fw-bold mb-0">
@@ -29,6 +31,7 @@
         <span class="badge bg-danger">Stale</span>
         {% endif %} {% endif %}
       </div>
+      </a>
 
       <!-- Area Cluster and location -->
       <div class="text-muted small mb-2">

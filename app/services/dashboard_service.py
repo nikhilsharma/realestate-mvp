@@ -1,3 +1,6 @@
+from app.models.broker_property_model import get_broker_properties_filtered
+from app.services.broker_visuals import decorate_broker_properties
+
 from app.models.client_model import (
     get_all_clients,
     update_lead_data,
@@ -16,6 +19,10 @@ def refresh_lead_scores():
     clients = get_all_clients()
 
     for client in clients:
+        # Respect manual override
+        if client.get("lead_temperature_override"):
+            continue
+
         matching_count = len(get_matching_properties(client))
         score = calculate_lead_score(client, matching_count)
         temperature = classify_temperature(score)
@@ -35,26 +42,25 @@ def build_dashboard_context():
     hot_leads = get_clients_by_temperature("hot")
     followups = get_followups_today()
 
-    active_properties = get_properties(
-        search="",
-        mode_filters=["Sale", "Rent"],
-        active_filters=["true"],
-        status_filters=["Available"]
+    active_properties = get_broker_properties_filtered(
+    modes=["Sale", "Rent"],
+    is_available=["true"],
+    freshness=["fresh", "aging"]
     )
 
-    recent_properties = get_properties(
-    search="",
-    mode_filters=["Sale", "Rent"],
-    active_filters=["true"],
-    status_filters=["Available"]
+    recent_properties = get_broker_properties_filtered(
+    modes=["Sale", "Rent"],
+    is_available=["true"],
+    freshness=["fresh", "aging"]
     )[:5]
 
-    archived_properties = get_properties(
-        search="",
-        mode_filters=["Sale", "Rent"],
-        active_filters=["false"],
-        status_filters=["Available", "Closed"]
+    archived_properties = get_broker_properties_filtered(
+    modes=["Sale", "Rent"],
+    is_available=["false"],
     )
+
+    # Only decorate the displayed items
+    recent_properties = decorate_broker_properties(recent_properties)
 
     active_properties_count = len(active_properties)
     archived_properties_count = len(archived_properties)
@@ -66,7 +72,7 @@ def build_dashboard_context():
         {
             "label": "Active Properties", 
             "value": active_properties_count,
-            "url": "/properties?is_active=true&status=Available"
+            "url": "/broker-properties"
         },
         {
             "label": "Hot Leads", 
@@ -81,7 +87,7 @@ def build_dashboard_context():
         {
             "label": "Archived Properties", 
             "value": archived_properties_count,
-            "url": "/properties?is_active=false"
+            "url": "/broker-properties?is_available=false"
         },
     ]
 

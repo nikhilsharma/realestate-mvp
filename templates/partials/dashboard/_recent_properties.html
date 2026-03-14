@@ -1,7 +1,7 @@
 <div class="card shadow-sm p-3 mb-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h6 class="mb-0">Recent Properties</h6>
-    <a href="/properties" class="small text-decoration-none">
+    <a href="/broker-properties" class="small text-decoration-none">
       View All
     </a>
   </div>
@@ -11,7 +11,7 @@
       {% for property in recent_properties %}
         <li class="list-group-item px-0">
 
-          <a href="/property/{{ property.id }}"
+          <a href="/broker-property/{{ property.id }}"
              class="d-flex justify-content-between align-items-center text-decoration-none text-dark recent-property-link">
 
             <div>
@@ -24,7 +24,7 @@
             </div>
 
             <div class="fw-semibold">
-              ₹ {{ property.budget }}
+              ₹ {{ property.budget or "—" }}
             </div>
 
           </a>

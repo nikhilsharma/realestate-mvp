@@ -7,7 +7,7 @@ from app.services.request_utils import extract_filters, extract_client_filters, 
 from app.services.dashboard_service import build_dashboard_context
 from app.services.request_utils import extract_broker_filters
 from app.models.broker_property_model import get_broker_properties_filtered, get_broker_properties, get_broker_property_by_id
-from app.services.broker_property_service import add_broker_property
+from app.services.broker_property_service import add_broker_property, get_broker_property_by_id
 from app.services.broker_visuals import decorate_broker_properties
 from app.models.broker_property_model import update_broker_property
 from app.settings.constants import BROKER_PROPERTY_TAGS, AREA_CLUSTERS, CONFIGURATIONS
@@ -319,3 +319,16 @@ def register_routes(app):
             all_area_clusters = AREA_CLUSTERS,
             all_configurations=CONFIGURATIONS
         )
+
+    @app.route("/broker-property/<int:property_id>")
+    def broker_property_detail(property_id):
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        property = get_broker_property_by_id(property_id)
+
+        if not property:
+            return "Property not found", 404
+
+        return render_template("broker_property_detail.html", property=property)
+

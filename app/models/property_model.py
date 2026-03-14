@@ -86,11 +86,10 @@ def get_matching_properties(client):
         return []
 
     query = """
-        SELECT * FROM properties
+        SELECT * FROM broker_properties
         WHERE mode = %s
         AND type = %s
-        AND is_active = TRUE
-        AND status = 'Available'
+        AND is_available = TRUE
     """
     params = [mode, client["property_type"]]
 
