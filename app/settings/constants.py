@@ -20,6 +20,9 @@ BROKER_PROPERTY_TAGS = [
     "Park Facing",
     "Lift",
     "Parking",
+    "Ground Floor",
+    "First Floor",
+    "Second Floor",
     "Builder Floor",
     "Independent Floor",
     "New Construction",
@@ -60,11 +63,13 @@ PROPERTY_MODE_CODES = {
 # Property Configurations
 CONFIGURATIONS = [
     "1RK",
+    "1+1",
     "1BHK",
     "2BHK",
     "3BHK",
     "4BHK",
     "Builder Floor",
     "Shop",
-    "Office"
+    "Office",
+    "Plot"
 ]
