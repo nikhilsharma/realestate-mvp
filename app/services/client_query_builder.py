@@ -5,7 +5,9 @@ def _build_client_query(search=None, lead_temperature=None, is_active=None):
     # ---------- Lead Temperature (OR inside group) ----------
     if lead_temperature:
         placeholders = ", ".join(["%s"] * len(lead_temperature))
-        conditions.append(f"lead_temperature IN ({placeholders})")
+        conditions.append(
+        f"COALESCE(lead_temperature_override, lead_temperature) IN ({placeholders})"
+                        )
         params.extend(lead_temperature)
 
     # ---------- Record State ----------
