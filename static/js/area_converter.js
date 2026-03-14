@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateSqGaj() {
         if (sqft.value) {
-            sqgaj.value = (parseFloat(sqft.value) / 9).toFixed(2);
+            sqgaj.value = Math.round(parseFloat(sqft.value) / 9);
         } else {
             sqgaj.value = "";
         }
@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateSqFt() {
         if (sqgaj.value) {
-            sqft.value = (parseFloat(sqgaj.value) * 9).toFixed(0);
+            sqft.value = Math.round(parseFloat(sqgaj.value) * 9);
         } else {
             sqft.value = "";
         }

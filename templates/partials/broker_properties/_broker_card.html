@@ -40,6 +40,15 @@
       <div class="small text-muted mb-2">{{ property.type }}</div>
       {% endif %}
 
+      <!-- Area -->
+       {% if property.area %}
+      <div class="small text-muted mb-2">
+        <strong>{{ property.area }}</strong> sq ft
+        <span class="mx-1">•</span>
+        {{ (property.area / 9) | round | int }} sq gaj
+      </div>
+      {% endif %}
+
       <!-- Broker -->
       <div class="small mb-2">
         👤 <strong>Broker:</strong> {{ property.broker_name or "Unknown Broker" }}

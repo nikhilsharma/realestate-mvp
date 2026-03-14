@@ -138,6 +138,11 @@ def init_db():
     ADD COLUMN IF NOT EXISTS owner_contact TEXT;
     """)
 
+    cursor.execute("""
+    ALTER TABLE broker_properties
+    ADD COLUMN IF NOT EXISTS area INTEGER
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

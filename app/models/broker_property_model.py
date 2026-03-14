@@ -15,6 +15,7 @@ def create_broker_property(data):
             location,
             location_normalized,
             budget,
+            area,
             mode,
             type,
             video_link,
@@ -25,7 +26,7 @@ def create_broker_property(data):
             tags,
             last_confirmed_at
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
     """, (
         data["area_cluster"],
@@ -33,6 +34,7 @@ def create_broker_property(data):
         data["location"],
         location_normalized,
         data["budget"],
+        data.get("area"),
         data["mode"],
         data.get("type", "Residential"),
         data.get("video_link"),
@@ -173,6 +175,7 @@ def update_broker_property(property_id, data):
         configuration=%s,
         location=%s,
         budget=%s,
+        area=%s,
         mode=%s,
         type=%s,
         video_link=%s,
@@ -188,6 +191,7 @@ def update_broker_property(property_id, data):
         data.get("configuration"),
         data["location"],
         data["budget"],
+        data.get("area"),
         data["mode"],
         data["type"],
         data["video_link"],

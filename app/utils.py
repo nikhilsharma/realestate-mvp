@@ -51,6 +51,7 @@ def parse_broker_property_form(form):
         "configuration": form.get("configuration"),
         "location": form.get("location"),
         "budget": int(form.get("budget", "0").replace(",", "")),
+        "area": int(form["area"]) if form.get("area") else None,
         "mode": form.get("mode"),
         "type": form.get("type"),
         "video_link": form.get("video_link") or None,
