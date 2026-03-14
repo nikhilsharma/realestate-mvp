@@ -1,11 +1,31 @@
 <div class="card shadow-sm p-3 mb-4 position-relative filter-card">
-
     <!-- Spinner -->
     <div class="filter-spinner position-absolute top-50 start-50 translate-middle d-none">
         <div class="spinner-border spinner-border-sm text-dark"></div>
     </div>
 
     <form method="GET" class="auto-submit-filters">
+        <!-- Header -->
+    <div
+      class="card-header bg-white"
+    >
+      <button
+        id="filterToggle"
+        type="button"
+        class="btn w-100 text-start fw-semibold d-flex align-items-center justify-content-between"
+        data-bs-toggle="collapse"
+        data-bs-target="#filterPanel"
+        aria-expanded="true"
+        aria-controls="filterPanel"
+      >
+        <span id="filterToggleText">Filters</span>
+        <span class="filter-arrow">▾</span>
+      </button>
+    </div>
+
+    <!-- Collapsible Filters -->
+    <div id="filterPanel" class="collapse show">
+      <div class="card-body">
         {% include "partials/clients/client_search.html" %}
         {% include "partials/clients/client_filters.html" %}
 
@@ -14,6 +34,8 @@
             <a href="/clients" class="btn btn-sm btn-outline-dark">
                 Clear Filters
             </a>
+        </div>
+        </div>
         </div>
     </form>
 </div>
