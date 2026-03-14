@@ -20,10 +20,12 @@ def create_broker_property(data):
             video_link,
             broker_name,
             broker_contact,
+            owner_name,
+            owner_contact,
             tags,
             last_confirmed_at
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
     """, (
         data["area_cluster"],
@@ -36,6 +38,8 @@ def create_broker_property(data):
         data.get("video_link"),
         data.get("broker_name"),
         data.get("broker_contact"),
+        data.get("owner_name"),
+        data.get("owner_contact"),
         data.get("tags", []),
         data["last_confirmed_at"]
     ))
@@ -174,6 +178,8 @@ def update_broker_property(property_id, data):
         video_link=%s,
         broker_name=%s,
         broker_contact=%s,
+        owner_name=%s,
+        owner_contact=%s,
         tags=%s,
         last_confirmed_at=%s
     WHERE id=%s
@@ -187,6 +193,8 @@ def update_broker_property(property_id, data):
         data["video_link"],
         data["broker_name"],
         data["broker_contact"],
+        data["owner_name"],
+        data["owner_contact"],
         data["tags"],
         data["last_confirmed_at"],
         property_id

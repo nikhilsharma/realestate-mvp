@@ -42,7 +42,7 @@
 
       <!-- Broker -->
       <div class="small mb-2">
-        👤 {{ property.broker_name or "Unknown Broker" }}
+        👤 <strong>Broker:</strong> {{ property.broker_name or "Unknown Broker" }}
       </div>
 
       {% if property.days_since_confirm is not none %}
@@ -54,6 +54,19 @@
       <div class="small text-muted mb-2">
         <a href="tel:{{ property.broker_contact }}">
           📞 {{ property.broker_contact }}
+        </a>
+      </div>
+      {% endif %}
+
+      <!-- Owner -->
+      <div class="small mb-2">
+        👤 <strong>Owner:</strong> {{ property.owner_name or "Unknown Owner" }}
+      </div>
+
+      {% if property.owner_contact %}
+      <div class="small text-muted mb-2">
+        <a href="tel:{{ property.owner_contact }}">
+          📞 {{ property.owner_contact }}
         </a>
       </div>
       {% endif %}

@@ -132,6 +132,12 @@ def init_db():
     ADD COLUMN IF NOT EXISTS lead_temperature_override TEXT
     """)
 
+    cursor.execute("""
+    ALTER TABLE broker_properties
+    ADD COLUMN IF NOT EXISTS owner_name TEXT,
+    ADD COLUMN IF NOT EXISTS owner_contact TEXT;
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

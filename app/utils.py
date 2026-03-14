@@ -56,6 +56,8 @@ def parse_broker_property_form(form):
         "video_link": form.get("video_link") or None,
         "broker_name": form.get("broker_name") or None,
         "broker_contact": form.get("broker_contact") or None,
+        "owner_name": form.get("owner_name") or None,
+        "owner_contact": form.get("owner_contact") or None,
         "tags": tags,
         "last_confirmed_at": last_confirmed_at
     }
