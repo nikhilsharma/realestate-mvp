@@ -1,15 +1,26 @@
-{% if property.video_link %}
+{% set ref = 'UBB-' ~ '%03d'|format(property.id) %}
+{% set message =
+  'Urban Bricks & Bonds\n\n' ~
+
+  (property.configuration ~ ' ' if property.configuration else '') ~
+
+  property.type ~ ' • ' ~ property.mode ~ '\n' ~
+
+  'Area: ' ~ property.area_cluster ~ '\n' ~
+
+  'Budget: ₹ ' ~ property.budget ~ '\n' ~
+
+  ('Size: ' ~ property.area ~ ' sq ft\n' if property.area else '') ~
+
+  'Ref: ' ~ ref ~ '\n' ~
+
+  ('\nVideo: ' ~ property.video_link if property.video_link else '')
+%}
+
 <a
   target="_blank"
-  href="https://wa.me/?text={{ (
-    'Urban Bricks & Bonds\n\n' ~
-    property.type ~ ' - ' ~ property.mode ~ '\n' ~
-    'Location: ' ~ property.location ~ '\n' ~
-    'Budget: ₹ ' ~ property.budget ~ '\n' ~
-    'Area: ' ~ property.area ~ ' sq ft\n\n' ~
-    'Video: ' ~ property.video_link
-  ) | urlencode }}"
-  class="btn btn-sm btn-success">
+  href="https://wa.me/?text={{ message | urlencode }}"
+  class="btn btn-sm btn-success position-relative z-1"
+>
   Share
 </a>
-{% endif %}
