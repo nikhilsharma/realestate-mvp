@@ -2,6 +2,7 @@ from datetime import date
 from app.db import get_db_connection
 from app.services.broker_query_builder import _build_broker_query
 from app.services.location_utils import normalize_location
+from app.pagination import paginate_query
 
 def create_broker_property(data):
     location_normalized = normalize_location(data.get("location"))
@@ -111,12 +112,14 @@ def get_broker_properties_filtered(
     is_available=None,
     search=None,
     tags=None,
+    page=1,
+    per_page=20,
     **_
 ):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    query, params = _build_broker_query(
+    base_query, params = _build_broker_query(
         area_clusters,
         configurations,
         modes,
@@ -125,18 +128,20 @@ def get_broker_properties_filtered(
         search,
         tags
     )
-    print("QUERY:", query)
+    print("QUERY:", base_query)
     print("PARAMS:", params)
-    cursor.execute(query, params)
-
-    rows = cursor.fetchall()
-    columns = [desc[0] for desc in cursor.description]
-    results = [dict(zip(columns, row)) for row in rows]
+    results, total_count, total_pages = paginate_query(
+        cursor,
+        base_query,
+        params,
+        page,
+        per_page
+    )
 
     cursor.close()
     conn.close()
 
-    return results
+    return results, total_count, total_pages
 
 def get_broker_property_by_id(property_id):
 

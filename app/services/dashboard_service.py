@@ -42,28 +42,35 @@ def build_dashboard_context():
     hot_leads = get_clients_by_temperature("hot")
     followups = get_followups_today()
 
-    active_properties = get_broker_properties_filtered(
+    # Active properties (only need count)
+    _, active_properties_count, _ = get_broker_properties_filtered(
     modes=["Sale", "Rent"],
     is_available=["true"],
-    freshness=["fresh", "aging"]
+    freshness=["fresh", "aging"],
+    page=1,
+    per_page=1   # minimal rows since we only need count
     )
 
-    recent_properties = get_broker_properties_filtered(
+    # Recent properties (display 5)
+    recent_properties, _, _  = get_broker_properties_filtered(
     modes=["Sale", "Rent"],
     is_available=["true"],
-    freshness=["fresh", "aging"]
-    )[:5]
+    freshness=["fresh", "aging"],
+    page=1,
+    per_page=5
+    )
 
-    archived_properties = get_broker_properties_filtered(
+    # Archived properties (only need count)
+    _, archived_properties_count, _ = get_broker_properties_filtered(
     modes=["Sale", "Rent"],
     is_available=["false"],
+    page=1,
+    per_page=1
     )
 
     # Only decorate the displayed items
     recent_properties = decorate_broker_properties(recent_properties)
 
-    active_properties_count = len(active_properties)
-    archived_properties_count = len(archived_properties)
     hot_leads_count = len(hot_leads)
     followups_count = len(followups)
 

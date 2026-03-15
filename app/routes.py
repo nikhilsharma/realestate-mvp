@@ -234,16 +234,26 @@ def register_routes(app):
             return redirect("/login")
 
         filters = extract_broker_filters(request)
-        broker_properties = get_broker_properties_filtered(**filters)
-        # broker_properties = get_broker_properties()
-        broker_properties = decorate_broker_properties(broker_properties)
+        page = request.args.get("page", 1, type=int)
+        
+        properties, total_count, total_pages = get_broker_properties_filtered(
+        page=page,
+        **filters
+        )
+
+        properties = decorate_broker_properties(properties)
 
         print("FILTERS:", filters)
-        print("RESULT COUNT:", len(broker_properties))
+        print("PAGE:", page)
+        print("TOTAL RESULTS:", total_count)
+        print("RETURNED:", len(properties))
+
 
         return render_template(
             "broker_properties.html",
-            properties=broker_properties,
+            properties=properties,
+            page=page,
+            total_pages = total_pages,
             all_area_clusters = AREA_CLUSTERS,
             all_tags=BROKER_PROPERTY_TAGS,
             all_configurations=CONFIGURATIONS,

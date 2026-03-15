@@ -1,0 +1,11 @@
+{% if page < total_pages %}
+
+<div class="text-center mt-4">
+  <a
+    href="?page={{ page + 1 }}"
+    class="btn btn-outline-dark btn-sm px-4"
+  >
+    Load More
+  </a>
+</div>
+{% endif %}
