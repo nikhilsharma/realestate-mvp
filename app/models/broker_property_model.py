@@ -119,29 +119,33 @@ def get_broker_properties_filtered(
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    base_query, params = _build_broker_query(
-        area_clusters,
-        configurations,
-        modes,
-        freshness,
-        is_available,
-        search,
-        tags
-    )
-    print("QUERY:", base_query)
-    print("PARAMS:", params)
-    results, total_count, total_pages = paginate_query(
-        cursor,
-        base_query,
-        params,
-        page,
-        per_page
-    )
+    try:
+        base_query, params = _build_broker_query(
+            area_clusters,
+            configurations,
+            modes,
+            freshness,
+            is_available,
+            search,
+            tags
+        )
+        print("QUERY:", base_query)
+        print("PARAMS:", params)
+        
+        data = paginate_query(
+            cursor,
+            base_query,
+            params,
+            page,
+            per_page
+        )
 
-    cursor.close()
-    conn.close()
+        return data
+    
+    finally:
+        cursor.close()
+        conn.close()
 
-    return results, total_count, total_pages
 
 def get_broker_property_by_id(property_id):
 

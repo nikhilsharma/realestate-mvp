@@ -43,16 +43,18 @@ def build_dashboard_context():
     followups = get_followups_today()
 
     # Active properties (only need count)
-    _, active_properties_count, _ = get_broker_properties_filtered(
+    data = get_broker_properties_filtered(
     modes=["Sale", "Rent"],
     is_available=["true"],
     freshness=["fresh", "aging"],
     page=1,
     per_page=1   # minimal rows since we only need count
     )
+    
+    active_properties_count = data["total"]
 
     # Recent properties (display 5)
-    recent_properties, _, _  = get_broker_properties_filtered(
+    data  = get_broker_properties_filtered(
     modes=["Sale", "Rent"],
     is_available=["true"],
     freshness=["fresh", "aging"],
@@ -60,13 +62,16 @@ def build_dashboard_context():
     per_page=5
     )
 
+    recent_properties = data["items"]
+
     # Archived properties (only need count)
-    _, archived_properties_count, _ = get_broker_properties_filtered(
+    data = get_broker_properties_filtered(
     modes=["Sale", "Rent"],
     is_available=["false"],
     page=1,
     per_page=1
     )
+    archived_properties_count = data["total"]
 
     # Only decorate the displayed items
     recent_properties = decorate_broker_properties(recent_properties)

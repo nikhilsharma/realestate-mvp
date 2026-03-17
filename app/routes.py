@@ -236,18 +236,15 @@ def register_routes(app):
         filters = extract_broker_filters(request)
         page = request.args.get("page", 1, type=int)
         
-        properties, total_count, total_pages = get_broker_properties_filtered(
+        data = get_broker_properties_filtered(
         page=page,
         **filters
         )
 
+        properties = data["items"]
+        total_pages = data["pages"]
+        total_count = data["total"]
         properties = decorate_broker_properties(properties)
-
-        print("FILTERS:", filters)
-        print("PAGE:", page)
-        print("TOTAL RESULTS:", total_count)
-        print("RETURNED:", len(properties))
-
 
         return render_template(
             "broker_properties.html",

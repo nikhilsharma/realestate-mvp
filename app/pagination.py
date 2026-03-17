@@ -22,4 +22,9 @@ def paginate_query(cursor, base_query, params, page=1, per_page=20):
 
     total_pages = (total_count + per_page - 1) // per_page
 
-    return results, total_count, total_pages
+    return {
+        "items": results,
+        "total": total_count,
+        "pages": total_pages,
+        "page": page
+    }
