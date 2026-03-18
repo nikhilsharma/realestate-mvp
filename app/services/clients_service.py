@@ -4,9 +4,15 @@ from app.models.client_model import get_clients_filtered
 
 def build_clients_context(request):
     filters = extract_client_filters(request)
-    clients = get_clients_filtered(**filters)
-
+    page = request.args.get("page", 1, type=int)
+    data = get_clients_filtered(
+        page=page,
+        **filters
+    )
+    
     return {
-        "clients": clients,
+        "clients": data["items"],
+        "page": data["page"],
+        "total_pages": data["pages"],
         **filters
     }

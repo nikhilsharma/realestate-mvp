@@ -112,10 +112,16 @@ def register_routes(app):
             return redirect("/login")
 
         filters = extract_client_filters(request)
-        clients = get_clients_filtered(**filters)
+        page = request.args.get("page", 1, type=int)
+
+        data = get_clients_filtered(
+            page = page,
+            **filters)
 
         return render_template("clients.html", 
-                               clients=clients,
+                               clients=data["items"],
+                               page=data["page"],
+                               total_pages=data["pages"],
                                **filters)
 
     @app.route("/add-client", methods=["GET", "POST"])

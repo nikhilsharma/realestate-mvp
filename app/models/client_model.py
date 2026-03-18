@@ -3,6 +3,7 @@ from datetime import date
 from app.services.location_utils import normalize_location
 from app.services.client_query_builder import _build_client_query
 from app.services.seller_matching import filter_matching_buyers
+from app.pagination import paginate_query
 
 def create_client(data):
     location_normalized = normalize_location(data.get("location"))
@@ -51,24 +52,32 @@ def get_all_clients():
 
     return results
 
-def get_clients_filtered(search=None, lead_temperature=None, is_active=None):
+def get_clients_filtered(
+        search=None, 
+        lead_temperature=None, 
+        is_active=None, page=1,
+        per_page=20,
+        **_):
+    
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    query, params = _build_client_query(search=search, 
+    base_query, params = _build_client_query(search=search, 
                                         lead_temperature=lead_temperature, 
                                         is_active=is_active)
     
-    cursor.execute(query, params)
-
-    rows = cursor.fetchall()
-    columns = [desc[0] for desc in cursor.description]
-    results = [dict(zip(columns, row)) for row in rows]
+    data = paginate_query(
+        cursor,
+        base_query,
+        params,
+        page,
+        per_page
+    )
 
     cursor.close()
     conn.close()
 
-    return results
+    return data
 
 def get_followups_today():
     conn = get_db_connection()
