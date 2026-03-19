@@ -3,6 +3,7 @@ from app.db import get_db_connection
 from app.services.broker_query_builder import _build_broker_query
 from app.services.location_utils import normalize_location
 from app.pagination import paginate_query
+from app.logger import logger
 
 def create_broker_property(data):
     location_normalized = normalize_location(data.get("location"))
@@ -129,8 +130,8 @@ def get_broker_properties_filtered(
             search,
             tags
         )
-        print("QUERY:", base_query)
-        print("PARAMS:", params)
+        logger.debug("QUERY: %s", base_query)
+        logger.debug("PARAMS: %s", params)
         
         data = paginate_query(
             cursor,

@@ -15,7 +15,9 @@ def extract_property_filters(request):
     }
 
 def extract_client_filters(request):
-    lead_temperature = request.args.getlist("lead_temperature")
+    lead_temperature = apply_default_temperature_filter(
+        request.args.getlist("lead_temperature")
+    ) 
     is_active = apply_default_record_filter(request.args.getlist("is_active"))
     search = request.args.get("search")
 
@@ -27,6 +29,11 @@ def extract_client_filters(request):
 
 def apply_default_record_filter(is_active):
     return is_active or ["true"]
+
+def apply_default_temperature_filter(values):
+    if not values:
+        return ["hot", "warm"]  # default
+    return values
 
 def extract_broker_filters(request):
     tags = request.args.getlist("tags")

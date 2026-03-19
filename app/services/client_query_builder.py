@@ -1,3 +1,5 @@
+from app.logger import logging
+
 def _build_client_query(search=None, lead_temperature=None, is_active=None):
     conditions = []
     params = []
@@ -40,7 +42,7 @@ def _build_client_query(search=None, lead_temperature=None, is_active=None):
 
     query += " ORDER BY lead_score DESC, created_at DESC"
 
-    print("QUERY:", query)
-    print("PARAMS:", params)
+    logging.debug("QUERY: %s", query)
+    logging.debug("PARAMS: %s", params)
 
     return query, params

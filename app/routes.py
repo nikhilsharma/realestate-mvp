@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, session
 from config import Config
 from app.models.property_model import create_property, get_properties, toggle_property_status, get_matching_properties,get_property_by_id, update_property, soft_delete_property, restore_property_by_id
 from app.models.client_model import create_client, get_all_clients, get_followups_today, get_client_by_id, update_client, get_matching_buyers_for_seller, soft_delete_client, get_clients_filtered
-from app.utils import parse_client_form, parse_property_form, parse_broker_property_form
+from app.utils import parse_client_form, parse_property_form, parse_broker_property_form, build_next_page_url
 from app.services.request_utils import extract_filters, extract_client_filters, extract_property_filters
 from app.services.dashboard_service import build_dashboard_context
 from app.services.request_utils import extract_broker_filters
@@ -12,6 +12,7 @@ from app.services.broker_visuals import decorate_broker_properties
 from app.models.broker_property_model import update_broker_property
 from app.settings.constants import BROKER_PROPERTY_TAGS, AREA_CLUSTERS, CONFIGURATIONS
 from datetime import date
+from app.logger import logger
 
 def register_routes(app):
 
@@ -117,12 +118,31 @@ def register_routes(app):
         data = get_clients_filtered(
             page = page,
             **filters)
+        
+        logger.debug("TOTAL ITEMS: %s", data["total"])
+        logger.debug("PAGES: %s", data["pages"])
+        logger.debug("ITEMS ON THIS PAGE: %s", len(data["items"]))
+        logger.debug("CLIENT NAMES: %s", [c["name"] for c in data["items"]])
+        
+        next_page_url = build_next_page_url(request, page + 1, filters)
+        template_vars = dict(
+                        clients=data["items"],
+                        page=data["page"],
+                        total_pages=data["pages"],
+                        next_page_url=next_page_url,
+                        **filters
+                    )
+        
+        # HTMX requests only need the partial
+        if request.headers.get("HX-Request"):
+            logger.info("HX Request")
+            return render_template(
+                "partials/clients/_clients_page.html",
+                **template_vars
+            )
 
         return render_template("clients.html", 
-                               clients=data["items"],
-                               page=data["page"],
-                               total_pages=data["pages"],
-                               **filters)
+                               **template_vars)
 
     @app.route("/add-client", methods=["GET", "POST"])
     def add_client():
@@ -186,7 +206,7 @@ def register_routes(app):
 
         if request.method == "POST":
             data = parse_client_form(request.form)
-            print("Data to update client...",data)
+            logger.debug("Data to update client... %s",data)
             update_client(client_id, data)
             return redirect("/clients")
 
@@ -241,27 +261,31 @@ def register_routes(app):
 
         filters = extract_broker_filters(request)
         page = request.args.get("page", 1, type=int)
-        
-        data = get_broker_properties_filtered(
-        page=page,
-        **filters
-        )
+        next_page_url = build_next_page_url(request, page + 1, filters)
 
-        properties = data["items"]
-        total_pages = data["pages"]
-        total_count = data["total"]
-        properties = decorate_broker_properties(properties)
+        data = get_broker_properties_filtered(page=page, **filters)
 
-        return render_template(
-            "broker_properties.html",
+        properties = decorate_broker_properties(data["items"])  # ← fix: decorate here
+
+        template_vars = dict(
             properties=properties,
-            page=page,
-            total_pages = total_pages,
-            all_area_clusters = AREA_CLUSTERS,
+            page=data["page"],
+            total_pages=data["pages"],
+            next_page_url=next_page_url,
+            all_area_clusters=AREA_CLUSTERS,
             all_tags=BROKER_PROPERTY_TAGS,
             all_configurations=CONFIGURATIONS,
             **filters
         )
+
+        # HTMX requests only need the partial
+        if request.headers.get("HX-Request"):
+            return render_template(
+                "partials/broker_properties/_properties_page.html",  # ← fix: correct partial
+                **template_vars
+            )
+
+        return render_template("broker_properties.html", **template_vars)  # ← fix: use template_vars
 
     @app.route("/broker-property/<int:property_id>/confirm", methods=["POST"])
     def confirm_broker_property_route(property_id):

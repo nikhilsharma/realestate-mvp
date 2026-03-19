@@ -1,5 +1,7 @@
-<div class="row">
+<div class="row" id="properties-container">
     {% for property in properties %}
         {% include "partials/broker_properties/_broker_card.html" %}
     {% endfor %}
+    {% set container_id = "#properties-container" %}
+    {% include "partials/_pagination.html" %}
 </div>

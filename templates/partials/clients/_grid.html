@@ -1,10 +1,11 @@
+{% set container_id = "#clients-container" %}
 {% if clients %}
-<div class="row">
+<div class="row" id="clients-container">
   {% for client in clients %}
     {% include "partials/clients/_client_card.html" %}
   {% endfor %}
-</div>
   {% include "partials/_pagination.html" %}
+</div>
 {% else %}
 <div class="text-center text-muted mt-5">
     No clients yet.

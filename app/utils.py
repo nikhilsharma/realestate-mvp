@@ -1,4 +1,6 @@
 from datetime import datetime, date
+from urllib.parse import urlencode, urlparse, parse_qs
+from app.logger import logger
 
 def parse_property_form(form):
     return {
@@ -62,3 +64,17 @@ def parse_broker_property_form(form):
         "tags": tags,
         "last_confirmed_at": last_confirmed_at
     }
+
+def build_next_page_url(request, next_page, filters=None):
+    logger.debug("In build next page url method")
+    params = request.args.to_dict(flat=False)  # preserves lists
+
+    # if defaults were applied in Python but not in URL, add them explicitly
+    if filters:
+        for key, value in filters.items():
+            if key not in params and value:
+                params[key] = value if isinstance(value, list) else [value]
+
+    logger.debug("PARAMS>> %s ", params)
+    params["page"] = next_page       # just bump the page
+    return f"{request.path}?{urlencode(params, doseq=True)}"
