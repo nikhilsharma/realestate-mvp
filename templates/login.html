@@ -12,11 +12,20 @@
 
                 <form method="POST">
                     <div class="mb-3">
-                        <input type="text" name="username" class="form-control" placeholder="Username" required>
+                        <input type="text" name="username" 
+                        class="form-control" 
+                        placeholder="Username" 
+                        autocomplete="username"
+                        required>
                     </div>
 
                     <div class="mb-3">
-                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        <input type="password" 
+                        name="password" 
+                        class="form-control" 
+                        placeholder="Password" 
+                        autocomplete="current-password"
+                        required>
                     </div>
 
                     <button class="btn btn-dark w-100">Login</button>

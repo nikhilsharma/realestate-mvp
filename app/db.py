@@ -143,6 +143,12 @@ def init_db():
     ADD COLUMN IF NOT EXISTS area INTEGER
     """)
 
+    cursor.execute("""
+    ALTER TABLE broker_properties
+    ADD COLUMN IF NOT EXISTS latitude DOUBLE PRECISION,
+    ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION;
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

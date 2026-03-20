@@ -63,6 +63,28 @@
                                value="{{ property.location }}" required>
                     </div>
 
+                    <!-- GPS Location -->
+                    <div class="mb-3">
+                        <label class="form-label">Property Location (GPS)</label>
+                        <button type="button" id="getLocationBtn" class="btn btn-sm btn-outline-primary">
+                            {% if property.latitude and property.longitude %}
+                                📍 Update Location
+                            {% else %}
+                                📍 Use Current Location
+                            {% endif %}
+                        </button>
+                        <div class="small text-muted mt-1">Click while standing at property</div>
+                        <input type="hidden" name="latitude" id="latitude"
+                            value="{{ property.latitude or '' }}">
+                        <input type="hidden" name="longitude" id="longitude"
+                            value="{{ property.longitude or '' }}">
+                        <div id="locationStatus" class="small mt-2 text-success">
+                            {% if property.latitude and property.longitude %}
+                                ✅ Location already saved ({{ "%.5f"|format(property.latitude) }}, {{ "%.5f"|format(property.longitude) }})
+                            {% endif %}
+                        </div>
+                    </div>
+
                     <!-- Budget -->
                     <div class="mb-3">
                         <label class="form-label">Budget</label>

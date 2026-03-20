@@ -62,7 +62,9 @@ def parse_broker_property_form(form):
         "owner_name": form.get("owner_name") or None,
         "owner_contact": form.get("owner_contact") or None,
         "tags": tags,
-        "last_confirmed_at": last_confirmed_at
+        "last_confirmed_at": last_confirmed_at,
+        "latitude": float(form.get("latitude")) if form.get("latitude") else None,
+        "longitude": float(form.get("longitude")) if form.get("longitude") else None
     }
 
 def build_next_page_url(request, next_page, filters=None):

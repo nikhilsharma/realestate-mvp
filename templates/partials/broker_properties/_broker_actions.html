@@ -1,16 +1,50 @@
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
 
+  <!-- Left: meta -->
   <small class="text-muted">
     Confirmed {{ property.last_confirmed_at.strftime("%d-%m-%Y") if property.last_confirmed_at }}
   </small>
 
-  <div class="d-flex gap-2 flex-wrap justify-content-end">
+  <!-- Right: actions -->
+  <div class="d-flex align-items-center gap-1 flex-wrap justify-content-end">
 
-    <!-- Confirm freshness -->
+    <!-- 📞 Call -->
+    {% if property.broker_contact %}
+    <a href="tel:{{ property.broker_contact }}"
+       class="btn btn-sm btn-dark"
+       title="Call Broker">
+        📞 Call
+    </a>
+    {% endif %}
+
+    <!-- 📍 Map -->
+    {% if property.latitude and property.longitude %}
+    <a
+      href="https://www.google.com/maps?q={{ property.latitude }},{{ property.longitude }}"
+      target="_blank"
+      class="btn btn-sm btn-outline-primary"
+      title="Open in Maps"
+    >
+      📍Map
+    </a>
+    {% endif %}
+
+    <!-- 📤 Share -->
+    {% include "partials/property_share_button.html" %}
+
+    <!-- ✏️ Edit -->
+    <a href="/edit-broker-property/{{ property.id }}"
+       class="btn btn-sm btn-outline-secondary"
+       title="Edit Property">
+        ✏️ Edit
+    </a>
+
+    <!-- Confirm -->
     <form method="POST"
           action="/broker-property/{{ property.id }}/confirm">
-        <button class="btn btn-sm btn-outline-success">
-            Confirm
+        <button class="btn btn-sm btn-outline-success"
+                title="Confirm Property">
+            ✔
         </button>
     </form>
 
@@ -18,31 +52,17 @@
     <form method="POST"
           action="/broker-property/{{ property.id }}/toggle-availability">
         {% if property.is_available %}
-            <button class="btn btn-sm btn-outline-warning">
-                Mark Unavailable
+            <button class="btn btn-sm btn-outline-warning"
+                    title="Mark Unavailable">
+                ⛔
             </button>
         {% else %}
-            <button class="btn btn-sm btn-outline-primary">
-                Mark Available
+            <button class="btn btn-sm btn-outline-primary"
+                    title="Mark Available">
+                ✔
             </button>
         {% endif %}
     </form>
-
-    <!-- Edit property -->
-    <a href="/edit-broker-property/{{ property.id }}"
-       class="btn btn-sm btn-outline-secondary">
-        Edit
-    </a>
-
-    <!-- Contact broker -->
-    {% if property.broker_contact %}
-    <a href="tel:{{ property.broker_contact }}"
-       class="btn btn-sm btn-outline-dark">
-        Call
-    </a>
-    {% endif %}
-
-    {% include "partials/property_share_button.html" %}
 
   </div>
 

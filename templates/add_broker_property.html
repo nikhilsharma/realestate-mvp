@@ -61,6 +61,27 @@
                         <input name="location" class="form-control" placeholder="e.g. A Block" required>
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label">Property Location (GPS)</label>
+
+                        <button type="button" 
+                            id="getLocationBtn" 
+                            class="btn btn-sm btn-outline-primary">
+                            📍 Use Current Location
+                        </button>
+
+                        <div class="small text-muted mt-1">
+                            Click while standing at property
+                        </div>
+
+                        <!-- Hidden inputs -->
+                        <input type="hidden" name="latitude" id="latitude">
+                        <input type="hidden" name="longitude" id="longitude">
+
+                        <!-- Feedback -->
+                        <div id="locationStatus" class="small mt-2 text-success"></div>
+                    </div>
+
                     <!-- Budget -->
                     <div class="mb-3">
                         <label class="form-label">Budget</label>
