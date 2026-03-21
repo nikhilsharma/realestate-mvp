@@ -1,4 +1,4 @@
-{% if page < total_pages %}
+{% if page is defined and total_pages is defined and page < total_pages %}
 <!-- DEBUG: container={{ container_id }} next={{ next_page_url }} -->
 <div class="text-center mt-4" id="load-more-container">
   <button

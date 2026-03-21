@@ -8,36 +8,11 @@
 </h4>
 
 {% if properties %}
+<div class="row">
     {% for property in properties %}
-        <div class="card mb-3 shadow-sm">
-            <div class="card-body">
-
-                <h6>
-                    {{ property.type }} - {{ property.mode }}
-                </h6>
-
-                <div class="small text-muted">
-                    📍 {{ property.location }}
-                </div>
-
-                <div class="fw-semibold">
-                    ₹ {{ property.budget }}
-                </div>
-
-                <div class="small">
-                    {{ property.area }} sq ft
-                </div>
-
-                <div class="mt-2">
-                    Owner: {{ property.owner_name }} <br>
-                    <a href="tel:{{ property.owner_contact }}">
-                        📞 {{ property.owner_contact }}
-                    </a>
-                </div>
-
-            </div>
-        </div>
+        {% include "partials/broker_properties/_broker_card.html" %}
     {% endfor %}
+</div>
 {% else %}
     <div class="text-muted">
         No matching properties found.

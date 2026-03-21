@@ -15,23 +15,29 @@ from app.services.lead_scoring import (
     classify_temperature
 )
 
+def refresh_single_client_score(client):
+    # Respect manual override
+    if client.get("lead_temperature_override"):
+        return
+
+    matching_count = len(get_matching_properties(client))
+    score = calculate_lead_score(client, matching_count)
+    temperature = classify_temperature(score)
+
+    if (
+        score != client.get("lead_score")
+        or temperature != client.get("lead_temperature")
+    ):
+        update_lead_data(client["id"], score, temperature)
+    
+    print(f"Client {client['id']}, {client['name']} → score: {score}, temp: {temperature}")
+    print(f"Matching count: {matching_count}")
+
 def refresh_lead_scores():
     clients = get_all_clients()
 
     for client in clients:
-        # Respect manual override
-        if client.get("lead_temperature_override"):
-            continue
-
-        matching_count = len(get_matching_properties(client))
-        score = calculate_lead_score(client, matching_count)
-        temperature = classify_temperature(score)
-
-        if (
-            score != client.get("lead_score")
-            or temperature != client.get("lead_temperature")
-        ):
-            update_lead_data(client["id"], score, temperature)
+        refresh_single_client_score(client)
 
 
 def build_dashboard_context():

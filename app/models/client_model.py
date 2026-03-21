@@ -14,6 +14,7 @@ def create_client(data):
         INSERT INTO clients
         (name, contact, requirement, property_type, location, location_normalized, budget, followup_date, status, notes, next_action, profession)
         VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        RETURNING id
     """, (
         data["name"],
         data["contact"],
@@ -29,9 +30,13 @@ def create_client(data):
         data.get("profession")
     ))
 
+    client_id = cursor.fetchone()[0]
+
     conn.commit()
     cursor.close()
     conn.close()
+
+    return client_id
 
 
 def get_all_clients():
@@ -107,21 +112,19 @@ def get_client_by_id(client_id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM clients WHERE id = %s", (client_id,))
-    row = cursor.fetchone()
+    try:
+        cursor.execute("SELECT * FROM clients WHERE id = %s", (client_id,))
+        row = cursor.fetchone()
 
-    if not row:
+        if not row:
+            return None
+
+        columns = [desc[0] for desc in cursor.description]
+        return dict(zip(columns, row))
+
+    finally:
         cursor.close()
         conn.close()
-        return None
-
-    columns = [desc[0] for desc in cursor.description]
-    result = dict(zip(columns, row))
-
-    cursor.close()
-    conn.close()
-
-    return result
 
 def update_client(client_id, data):
     location_normalized = normalize_location(data.get("location"))

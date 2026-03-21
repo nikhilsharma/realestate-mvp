@@ -3,6 +3,8 @@ from app.services.matching import build_location_filter
 from app.services.client_rules import map_client_requirement_to_property_mode
 from app.services.query_builder import build_in_filter
 from app.services.property_query import _build_property_query
+from app.settings.constants import BUDGET_UPPER_MULTIPLIER, BUDGET_LOWER_MULTIPLIER
+from app.logger import logger
 
 def create_property(data):
     conn = get_db_connection()
@@ -99,10 +101,10 @@ def get_matching_properties(client):
         query += location_sql
         params.extend(location_params)
 
-    # Budget filter (±10%)
+    # Budget filter (±25%)
     if client["budget"]:
-        lower = int(client["budget"] * 0.9)
-        upper = int(client["budget"] * 1.1)
+        lower = int(client["budget"] * BUDGET_LOWER_MULTIPLIER)
+        upper = int(client["budget"] * BUDGET_UPPER_MULTIPLIER)
         query += " AND budget BETWEEN %s AND %s"
         params.extend([lower, upper])
 
@@ -116,6 +118,8 @@ def get_matching_properties(client):
 
     cursor.close()
     conn.close()
+    logger.debug("FINAL QUERY: %s", query)
+    logger.debug("PARAMS: %s", params)
 
     return results
 

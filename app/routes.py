@@ -10,9 +10,11 @@ from app.models.broker_property_model import get_broker_properties_filtered, get
 from app.services.broker_property_service import add_broker_property, get_broker_property_by_id
 from app.services.broker_visuals import decorate_broker_properties
 from app.models.broker_property_model import update_broker_property
+from app.models.client_model import get_all_clients
 from app.settings.constants import BROKER_PROPERTY_TAGS, AREA_CLUSTERS, CONFIGURATIONS
 from datetime import date
 from app.logger import logger
+from app.services.clients_service import create_client_service
 
 def register_routes(app):
 
@@ -38,7 +40,10 @@ def register_routes(app):
         return render_template(
             "clients.html",
             clients=followups,
-            page_title="Followups Today"
+            page_title="Followups Today",
+            page=1,
+            total_pages=1,
+            next_page_url=None
         )
     
     @app.route("/properties")
@@ -151,7 +156,7 @@ def register_routes(app):
 
         if request.method == "POST":
             data = parse_client_form(request.form)
-            create_client(data)
+            create_client_service(data)
             return redirect("/clients")
         
         return render_template("add_client.html")
@@ -161,15 +166,13 @@ def register_routes(app):
         if not session.get("logged_in"):
             return redirect("/login")
 
-        from app.models.client_model import get_all_clients
-
-        clients = get_all_clients()
-        client = next((c for c in clients if c["id"] == client_id), None)
+        client = get_client_by_id(client_id)
 
         if not client:
             return "Client not found"
 
         properties = get_matching_properties(client)
+        properties = decorate_broker_properties(properties)
 
         return render_template(
             "client_matches.html",

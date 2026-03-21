@@ -1,5 +1,6 @@
 from app.services.request_utils import extract_client_filters
-from app.models.client_model import get_clients_filtered
+from app.models.client_model import get_clients_filtered, create_client, get_client_by_id
+from app.services.dashboard_service import refresh_single_client_score
 
 
 def build_clients_context(request):
@@ -16,3 +17,9 @@ def build_clients_context(request):
         "total_pages": data["pages"],
         **filters
     }
+
+def create_client_service(data):
+    client_id = create_client(data)
+    client = get_client_by_id(client_id)
+    refresh_single_client_score(client)
+    return client_id

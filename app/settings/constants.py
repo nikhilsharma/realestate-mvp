@@ -2,9 +2,9 @@
 HOT_LEAD_THRESHOLD = 60
 WARM_LEAD_THRESHOLD = 30
 
-# Budget tolerance multiplier
-BUDGET_LOWER_MULTIPLIER = 0.85
-BUDGET_UPPER_MULTIPLIER = 1.15
+# Budget tolerance multiplier +-25%
+BUDGET_LOWER_MULTIPLIER = 0.75
+BUDGET_UPPER_MULTIPLIER = 1.25
 
 # Broker Inventory Freshness Rules
 
