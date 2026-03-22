@@ -32,6 +32,13 @@
         {{ client.requirement }} | {{ client.property_type }}
       </div>
 
+      <!-- Area Clusters -->
+      {% if client.area_clusters %}
+      <div class="small text-muted">
+        📍 {{ client.area_clusters | join(", ") }}
+      </div>
+      {% endif %}
+      
       <!-- Location -->
       <div class="small text-muted mb-1">
         📍 {{ client.location }}

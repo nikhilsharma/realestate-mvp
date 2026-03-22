@@ -159,7 +159,7 @@ def register_routes(app):
             create_client_service(data)
             return redirect("/clients")
         
-        return render_template("add_client.html")
+        return render_template("add_client.html", all_area_clusters=AREA_CLUSTERS)
 
     @app.route("/client/<int:client_id>/matches")
     def client_matches(client_id):
@@ -213,7 +213,9 @@ def register_routes(app):
             update_client(client_id, data)
             return redirect("/clients")
 
-        return render_template("edit_client.html", client=client)
+        return render_template("edit_client.html", 
+                               client=client,
+                               all_area_clusters=AREA_CLUSTERS)
 
     @app.route("/client/<int:client_id>/buyer-matches")
     def show_buyer_matches(client_id):

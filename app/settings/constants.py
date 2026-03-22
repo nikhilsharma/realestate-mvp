@@ -71,5 +71,7 @@ CONFIGURATIONS = [
     "Builder Floor",
     "Shop",
     "Office",
-    "Plot"
+    "Plot",
+    "PG",
+    "Upper Ground"
 ]

@@ -7,7 +7,7 @@
         <input 
               type="{{ 'radio' if mode == 'single' else 'checkbox' }}"
                class="btn-check"
-               name="{{ name }}"
+               name="{{ name }}{% if mode == 'multi' %}[]{% endif %}"
                id="{{ name }}-{{ area | replace(' ', '-') | lower }}"
                value="{{ area }}"
                

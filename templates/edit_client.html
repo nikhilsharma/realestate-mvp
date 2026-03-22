@@ -43,6 +43,12 @@
                         </select>
                     </div>
                     
+                    <!-- Area Clusters -->
+                    {% set name = "area_clusters" %}
+                    {% set selected = client.area_clusters if client else [] %}
+                    {% set mode = "multi" %}
+                    {% include "partials/_area_cluster.html" %}
+
                     <div class="mb-3">
                         <label class="form-label">Preferred Location</label>
                         <input name="location" class="form-control mb-2" value="{{ client.location }}">

@@ -23,6 +23,9 @@ def parse_client_form(form):
     budget_raw = form.get("budget")
     budget = int(budget_raw) if budget_raw else None
 
+    area_clusters = form.getlist("area_clusters[]") or None
+    print("Form.getlist area_clusters>>>>", form.getlist("area_clusters[]"))
+
     return {
         "name": form.get("name"),
         "contact": form.get("contact"),
@@ -34,7 +37,8 @@ def parse_client_form(form):
         "notes": form.get("notes"),
         "next_action": form.get("next_action"),
         "profession": form.get("profession"),
-        "lead_temperature_override": form.get("lead_temperature_override")
+        "lead_temperature_override": form.get("lead_temperature_override") or None,
+        "area_clusters": area_clusters
     }
 
 def parse_broker_property_form(form):

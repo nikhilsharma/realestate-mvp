@@ -149,6 +149,11 @@ def init_db():
     ADD COLUMN IF NOT EXISTS longitude DOUBLE PRECISION;
     """)
 
+    cursor.execute("""
+    ALTER TABLE clients
+    ADD COLUMN IF NOT EXISTS area_clusters TEXT[];
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

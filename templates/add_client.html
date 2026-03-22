@@ -30,6 +30,12 @@
                         <option>Commercial</option>
                     </select>
 
+                    <!-- Area Clusters -->
+                    {% set name = "area_clusters" %}
+                    {% set selected = client.area_clusters if client else [] %}
+                    {% set mode = "multi" %}
+                    {% include "partials/_area_cluster.html" %}
+
                     <input name="location" class="form-control mb-2" placeholder="Preferred Location">
 
                     <input type="number" name="budget" class="form-control mb-2" placeholder="Budget">

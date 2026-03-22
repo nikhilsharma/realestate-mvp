@@ -4,22 +4,28 @@ from app.services.location_utils import normalize_location
 from app.services.client_query_builder import _build_client_query
 from app.services.seller_matching import filter_matching_buyers
 from app.pagination import paginate_query
+from app.logger import logger
+
 
 def create_client(data):
     location_normalized = normalize_location(data.get("location"))
     conn = get_db_connection()
     cursor = conn.cursor()
+    logger.debug("area_clusters>>>",data.get("area_clusters"))
 
     cursor.execute("""
         INSERT INTO clients
-        (name, contact, requirement, property_type, location, location_normalized, budget, followup_date, status, notes, next_action, profession)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (name, contact, requirement, property_type, area_clusters, location, 
+                   location_normalized, budget, followup_date, status, notes, 
+                   next_action, profession)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
     """, (
         data["name"],
         data["contact"],
         data["requirement"],
         data["property_type"],
+        data.get("area_clusters"),
         data["location"],
         location_normalized,
         data["budget"],
@@ -78,6 +84,10 @@ def get_clients_filtered(
         page,
         per_page
     )
+
+    logger.debug("Base Query::: %s", base_query)
+    logger.debug("Params::: %s", params)
+
 
     cursor.close()
     conn.close()
@@ -144,7 +154,8 @@ def update_client(client_id, data):
             notes=%s,
             next_action=%s,                  
             profession=%s,
-            lead_temperature_override=%s
+            lead_temperature_override=%s,
+            area_clusters = %s
         WHERE id=%s
     """, (
         data["name"],
@@ -159,6 +170,7 @@ def update_client(client_id, data):
         data["next_action"],
         data.get("profession"),
         data.get("lead_temperature_override"),
+        data.get("area_clusters"),
         client_id
     ))
 
