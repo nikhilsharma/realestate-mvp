@@ -14,7 +14,7 @@ from app.models.client_model import get_all_clients
 from app.settings.constants import BROKER_PROPERTY_TAGS, AREA_CLUSTERS, CONFIGURATIONS
 from datetime import date
 from app.logger import logger
-from app.services.clients_service import create_client_service
+from app.services.clients_service import create_client_service, update_client_service
 
 def register_routes(app):
 
@@ -210,7 +210,7 @@ def register_routes(app):
         if request.method == "POST":
             data = parse_client_form(request.form)
             logger.debug("Data to update client... %s",data)
-            update_client(client_id, data)
+            update_client_service(client_id, data)
             return redirect("/clients")
 
         return render_template("edit_client.html", 
@@ -373,4 +373,21 @@ def register_routes(app):
             return "Property not found", 404
 
         return render_template("broker_property_detail.html", property=property)
+    
+    @app.route("/get-area-clusters")
+    def get_area_clusters():
+        requirement = request.args.get("requirement")
+
+        # get selected values (important for edit + switching)
+        selected = request.args.getlist("area_clusters[]")
+
+        mode = "single" if requirement == "Sell" else "multi"
+
+        return render_template(
+            "partials/_area_cluster.html",
+            name="area_clusters",
+            selected=selected,
+            mode=mode,
+            all_area_clusters=AREA_CLUSTERS
+        )
 

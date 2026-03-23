@@ -1,5 +1,5 @@
 from app.services.request_utils import extract_client_filters
-from app.models.client_model import get_clients_filtered, create_client, get_client_by_id
+from app.models.client_model import get_clients_filtered, create_client, get_client_by_id, update_client
 from app.services.dashboard_service import refresh_single_client_score
 
 
@@ -23,3 +23,8 @@ def create_client_service(data):
     client = get_client_by_id(client_id)
     refresh_single_client_score(client)
     return client_id
+
+def update_client_service(client_id, data):
+    update_client(client_id, data)
+    client = get_client_by_id(client_id)
+    refresh_single_client_score(client)

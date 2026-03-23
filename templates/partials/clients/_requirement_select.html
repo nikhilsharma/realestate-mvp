@@ -1,0 +1,24 @@
+{% if show_label %}
+<label class="form-label">Requirement</label>
+{% endif %}
+<select
+  name="requirement"
+  id="requirement"
+  hx-get="/get-area-clusters"
+  hx-target="#area-cluster-container"
+  hx-trigger="change"
+  hx-include="[name='area_clusters[]'], [name='area_clusters']"
+  class="form-select {% if not show_label %}mb-2{% endif %}"
+  required
+>
+  <option value="" {% if not selected %}selected{% endif %}>Requirement</option>
+  <option value="Rent" {% if selected == "Rent" %}selected{% endif %}>
+    Rent
+  </option>
+  <option value="Buy" {% if selected == "Buy" %}selected{% endif %}>
+    Buy
+  </option>
+  <option value="Sell" {% if selected == "Sell" %}selected{% endif %}>
+    Sell
+  </option>
+</select>

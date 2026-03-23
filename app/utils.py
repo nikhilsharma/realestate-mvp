@@ -23,13 +23,17 @@ def parse_client_form(form):
     budget_raw = form.get("budget")
     budget = int(budget_raw) if budget_raw else None
 
+    requirement = form.get("requirement")
+
     area_clusters = form.getlist("area_clusters[]") or None
-    print("Form.getlist area_clusters>>>>", form.getlist("area_clusters[]"))
+    logger.debug("Form.getlist area_clusters %s", form.getlist("area_clusters[]"))
+    if requirement == "Sell" and area_clusters:
+        area_clusters = [area_clusters[0]]  # ← enforce single for Sell
 
     return {
         "name": form.get("name"),
         "contact": form.get("contact"),
-        "requirement": form.get("requirement"),
+        "requirement": requirement,
         "property_type": form.get("property_type"),
         "location": form.get("location"),
         "budget": budget,

@@ -17,12 +17,10 @@
 
                     <input type="text" name="profession" class="form-control mb-2" placeholder="e.g., Software Engineer / Business Owner">
 
-                    <select name="requirement" class="form-select mb-2" required>
-                        <option value="">Requirement</option>
-                        <option>Rent</option>
-                        <option>Buy</option>
-                        <option>Sell</option>
-                    </select>
+                    <!-- Requirement -->
+                    {% set selected = None %}
+                    {% set show_label = False %}
+                    {% include "partials/clients/_requirement_select.html" %}
 
                     <select name="property_type" class="form-select mb-2" required>
                         <option value="">Property Type</option>
@@ -33,8 +31,10 @@
                     <!-- Area Clusters -->
                     {% set name = "area_clusters" %}
                     {% set selected = client.area_clusters if client else [] %}
-                    {% set mode = "multi" %}
-                    {% include "partials/_area_cluster.html" %}
+                    {% set mode = "single" if (client and client.requirement == "Sell") else "multi" %}
+                    <div id="area-cluster-container">
+                        {% include "partials/_area_cluster.html" %}
+                    </div>
 
                     <input name="location" class="form-control mb-2" placeholder="Preferred Location">
 

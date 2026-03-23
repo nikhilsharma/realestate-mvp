@@ -7,15 +7,11 @@
         <input 
               type="{{ 'radio' if mode == 'single' else 'checkbox' }}"
                class="btn-check"
-               name="{{ name }}{% if mode == 'multi' %}[]{% endif %}"
+               name="{{ name }}[]"
                id="{{ name }}-{{ area | replace(' ', '-') | lower }}"
                value="{{ area }}"
                
-               {% if mode == 'single' and selected == area %}
-                    checked
-                {% endif %}
-
-                {% if mode == 'multi' and selected and area in selected %}
+                {% if selected and area in selected %}
                     checked
                 {% endif %}>
 

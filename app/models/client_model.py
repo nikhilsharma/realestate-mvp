@@ -11,7 +11,7 @@ def create_client(data):
     location_normalized = normalize_location(data.get("location"))
     conn = get_db_connection()
     cursor = conn.cursor()
-    logger.debug("area_clusters>>>",data.get("area_clusters"))
+    logger.debug("area_clusters>>>%s",data.get("area_clusters"))
 
     cursor.execute("""
         INSERT INTO clients

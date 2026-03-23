@@ -27,12 +27,9 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label class="form-label">Requirement</label>
-                        <select name="requirement" class="form-select" required>
-                            <option value="Rent" {% if client.requirement == "Rent" %}selected{% endif %}>Rent</option>
-                            <option value="Buy" {% if client.requirement == "Buy" %}selected{% endif %}>Buy</option>
-                            <option value="Sell" {% if client.requirement == "Sell" %}selected{% endif %}>Sell</option>
-                        </select>
+                        {% set selected = client.requirement %}
+                        {% set show_label = True %}
+                        {% include "partials/clients/_requirement_select.html" %}
                     </div>
                     
                     <div class="mb-3">
@@ -46,8 +43,10 @@
                     <!-- Area Clusters -->
                     {% set name = "area_clusters" %}
                     {% set selected = client.area_clusters if client else [] %}
-                    {% set mode = "multi" %}
-                    {% include "partials/_area_cluster.html" %}
+                    {% set mode = "single" if (client and client.requirement == "Sell") else "multi" %}
+                    <div id="area-cluster-container">
+                        {% include "partials/_area_cluster.html" %}
+                    </div>
 
                     <div class="mb-3">
                         <label class="form-label">Preferred Location</label>
