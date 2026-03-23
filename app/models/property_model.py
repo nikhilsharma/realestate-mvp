@@ -95,10 +95,27 @@ def get_matching_properties(client):
     """
     params = [mode, client["property_type"]]
 
-    # Location filter
-    if client["location"]:
-        location_sql, location_params = build_location_filter(client.get("location"))
-        query += location_sql
+    # Location matching — combine area_clusters AND location text with OR
+    location_conditions = []
+    location_params = []
+
+    # area_clusters match
+    if client.get("area_clusters"):
+        placeholders = ",".join(["%s"] * len(client["area_clusters"]))
+        location_conditions.append(f"area_cluster IN ({placeholders})")
+        location_params.extend(client["area_clusters"])
+
+    # location text match
+    if client.get("location"):
+        loc_sql, loc_params = build_location_filter(client.get("location"))
+        if loc_sql:
+            # strip the leading " AND (" and trailing ")" to embed in our OR block
+            inner = loc_sql.strip().removeprefix("AND (").removesuffix(")")
+            location_conditions.append(f"({inner})")
+            location_params.extend(loc_params)
+    
+    if location_conditions:
+        query += " AND (" + " OR ".join(location_conditions) + ")"
         params.extend(location_params)
 
     # Budget filter (±25%)
