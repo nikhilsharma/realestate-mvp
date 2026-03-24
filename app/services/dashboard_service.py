@@ -39,8 +39,8 @@ def refresh_single_client_score(client, conn=None):
         ):
             update_lead_data(client["id"], score, temperature, conn)
         
-        print(f"***Client {client['id']}, {client['name']} → score: {score}, temp: {temperature}")
-        print(f"***Matching count: {matching_count}")
+        # print(f"***Client {client['id']}, {client['name']} → score: {score}, temp: {temperature}")
+        # print(f"***Matching count: {matching_count}")
     
     finally:
         if own_connection:
