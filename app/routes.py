@@ -15,6 +15,7 @@ from app.settings.constants import BROKER_PROPERTY_TAGS, AREA_CLUSTERS, CONFIGUR
 from datetime import date
 from app.logger import logger
 from app.services.clients_service import create_client_service, update_client_service
+from app.services.validation import ValidationError
 
 def register_routes(app):
 
@@ -155,9 +156,17 @@ def register_routes(app):
             return redirect("/login")
 
         if request.method == "POST":
-            data = parse_client_form(request.form)
-            create_client_service(data)
-            return redirect("/clients")
+            try:
+                data = parse_client_form(request.form)
+                create_client_service(data)
+                return redirect("/clients")
+            except ValidationError as e:
+                return render_template(
+                "add_client.html",
+                all_area_clusters=AREA_CLUSTERS,
+                error=e.message,
+                error_field=e.field
+            )
         
         return render_template("add_client.html", all_area_clusters=AREA_CLUSTERS)
 
@@ -208,10 +217,19 @@ def register_routes(app):
             return "Client not found"
 
         if request.method == "POST":
-            data = parse_client_form(request.form)
-            logger.debug("Data to update client... %s",data)
-            update_client_service(client_id, data)
-            return redirect("/clients")
+            try:
+                data = parse_client_form(request.form)
+                logger.debug("Data to update client... %s",data)
+                update_client_service(client_id, data)
+                return redirect("/clients")
+            except ValidationError as e:
+                return render_template(
+                    "edit_client.html",
+                    client=client,
+                    all_area_clusters=AREA_CLUSTERS,
+                    error=e.message,
+                    error_field=e.field
+                )
 
         return render_template("edit_client.html", 
                                client=client,
@@ -323,11 +341,21 @@ def register_routes(app):
             return redirect("/login")
 
         if request.method == "POST":
+            try:
+                data = parse_broker_property_form(request.form)
+                add_broker_property(data)
 
-            data = parse_broker_property_form(request.form)
-            add_broker_property(data)
-
-            return redirect("/broker-properties")
+                return redirect("/broker-properties")
+            except ValidationError as e:
+                return render_template(
+                    "add_broker_property.html",
+                    error=e.message,
+                    error_field=e.field,
+                    today=date.today().isoformat(),
+                    tags=BROKER_PROPERTY_TAGS,
+                    all_area_clusters=AREA_CLUSTERS,
+                    all_configurations=CONFIGURATIONS
+                )
 
         return render_template(
             "add_broker_property.html",
@@ -349,9 +377,21 @@ def register_routes(app):
             return "Broker Property not found"
 
         if request.method == "POST":
-            data = parse_broker_property_form(request.form)
-            update_broker_property(property_id, data)
-            return redirect("/broker-properties")
+            try:
+                data = parse_broker_property_form(request.form)
+                update_broker_property(property_id, data)
+                return redirect("/broker-properties")
+            except ValidationError as e:
+                return render_template(
+                "edit_broker_property.html",
+                today=date.today().isoformat(),
+                property=property,
+                tags=BROKER_PROPERTY_TAGS,
+                all_area_clusters = AREA_CLUSTERS,
+                all_configurations=CONFIGURATIONS,
+                error=e.message,
+                error_field=e.field
+            )
 
         return render_template(
             "edit_broker_property.html",

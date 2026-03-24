@@ -1,8 +1,9 @@
 from datetime import datetime, date
 from urllib.parse import urlencode, urlparse, parse_qs
 from app.logger import logger
+from app.services.validation import ValidationError
 
-def parse_property_form(form):
+def parse_property_form(form):    
     return {
         "type": form.get("type"),
         "mode": form.get("mode"),
@@ -29,6 +30,9 @@ def parse_client_form(form):
     logger.debug("Form.getlist area_clusters %s", form.getlist("area_clusters[]"))
     if requirement == "Sell" and area_clusters:
         area_clusters = [area_clusters[0]]  # ← enforce single for Sell
+    
+    if not area_clusters:
+        raise ValidationError("area_clusters", "Please select at least one area cluster")
 
     return {
         "name": form.get("name"),
@@ -56,8 +60,16 @@ def parse_broker_property_form(form):
     else:
         last_confirmed_at = date.today()
 
+    area_clusters = form.getlist("area_cluster[]")
+    area_cluster = area_clusters[0] if area_clusters else None
+
+    if not area_cluster:
+        raise ValidationError("area_cluster", "Please select an area cluster")
+
+    logger.debug("Form.getlist area_clusters %s", form.getlist("area_clusters[]"))
+
     return {
-        "area_cluster": form.get("area_cluster"),
+        "area_cluster": area_cluster,
         "configuration": form.get("configuration"),
         "location": form.get("location"),
         "budget": int(form.get("budget", "0").replace(",", "")),

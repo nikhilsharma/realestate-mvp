@@ -1,3 +1,7 @@
+{% if error_field == "area_cluster" or error_field == "area_clusters" %}
+<div class="alert alert-danger py-2 small">{{ error }}</div>
+{% endif %}
+
 <div class="mb-3">
 <label class="form-label">Area Cluster</label>
 <div class="d-flex flex-wrap gap-2">
