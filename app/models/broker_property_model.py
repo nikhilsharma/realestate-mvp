@@ -4,6 +4,10 @@ from app.services.broker_query_builder import _build_broker_query
 from app.services.location_utils import normalize_location
 from app.pagination import paginate_query
 from app.logger import logger
+from app.services.client_rules import map_client_requirement_to_property_mode
+from app.settings.constants import BUDGET_UPPER_MULTIPLIER, BUDGET_LOWER_MULTIPLIER
+from app.services.matching import build_location_filter
+
 
 def create_broker_property(data):
     location_normalized = normalize_location(data.get("location"))
@@ -240,3 +244,74 @@ def update_whatsapp_ref(property_id, whatsapp_ref):
     conn.commit()
     cursor.close()
     conn.close()
+
+def get_broker_property_count(is_available=True):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            SELECT COUNT(*) FROM broker_properties 
+            WHERE is_available = %s
+        """, (is_available,))
+        return cursor.fetchone()[0]
+    finally:
+        cursor.close()
+        conn.close()
+
+def get_matching_properties_count(client, conn=None):
+
+    own_connection = conn is None
+    if own_connection:
+        conn = get_db_connection()
+    
+    cursor = conn.cursor()
+
+    try:
+        mode = map_client_requirement_to_property_mode(client.get("requirement"))
+
+        if not mode:
+            return 0
+
+        query = """
+            SELECT COUNT(*)
+            FROM broker_properties
+            WHERE is_available = TRUE
+            AND mode = %s
+            AND type = %s
+        """
+        params = [mode, client["property_type"]]
+
+        # Location filters
+        location_conditions = []
+        location_params = []
+
+        if client.get("area_clusters"):
+            placeholders = ",".join(["%s"] * len(client["area_clusters"]))
+            location_conditions.append(f"area_cluster IN ({placeholders})")
+            location_params.extend(client["area_clusters"])
+
+        if client.get("location"):
+            loc_sql, loc_params = build_location_filter(client.get("location"))
+            if loc_sql:
+                inner = loc_sql.strip().removeprefix("AND (").removesuffix(")")
+                location_conditions.append(f"({inner})")
+                location_params.extend(loc_params)
+
+        if location_conditions:
+            query += " AND (" + " OR ".join(location_conditions) + ")"
+            params.extend(location_params)
+
+        # Budget
+        if client.get("budget"):
+            lower = int(client["budget"] * BUDGET_LOWER_MULTIPLIER)
+            upper = int(client["budget"] * BUDGET_UPPER_MULTIPLIER)
+            query += " AND budget BETWEEN %s AND %s"
+            params.extend([lower, upper])
+
+        cursor.execute(query, tuple(params))
+        return cursor.fetchone()[0]
+
+    finally:
+        cursor.close()
+        if own_connection:
+            conn.close()

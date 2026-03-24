@@ -45,8 +45,12 @@ def create_client(data):
     return client_id
 
 
-def get_all_clients():
-    conn = get_db_connection()
+def get_all_clients(conn=None):
+    own_connection = conn is None
+    
+    if (own_connection):
+        conn = get_db_connection()
+    
     cursor = conn.cursor()
 
     cursor.execute("SELECT * FROM clients WHERE is_active = TRUE ORDER BY created_at DESC")
@@ -59,7 +63,8 @@ def get_all_clients():
         results.append(dict(zip(columns, row)))
     
     cursor.close()
-    conn.close()
+    if (own_connection):
+        conn.close()
 
     return results
 
@@ -216,20 +221,26 @@ def soft_delete_client(client_id):
     cursor.close()
     conn.close()
 
-def update_lead_data(client_id, score, temperature):
-    conn = get_db_connection()
+def update_lead_data(client_id, score, temperature, conn=None):
+    own_connection = conn is None
+    if own_connection:
+        conn = get_db_connection()
     cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            UPDATE clients
+            SET lead_score = %s,
+                lead_temperature = %s
+            WHERE id = %s
+        """, (score, temperature, client_id))
 
-    cursor.execute("""
-        UPDATE clients
-        SET lead_score = %s,
-            lead_temperature = %s
-        WHERE id = %s
-    """, (score, temperature, client_id))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
+        if own_connection:
+            conn.commit()
+            
+    finally:
+        cursor.close()
+        if own_connection:
+            conn.close()
 
 def get_clients_by_temperature(temperature):
     conn = get_db_connection()
