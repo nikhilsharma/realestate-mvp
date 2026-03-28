@@ -2,7 +2,9 @@ from app.services.request_utils import extract_client_filters
 from app.models.client_model import get_clients_filtered, create_client, get_client_by_id, update_client
 from app.services.dashboard_service import refresh_single_client_score
 from app.models.broker_property_model import get_brokers_for_clients
-
+from app.models.property_model import get_matching_properties
+from app.services.broker_visuals import decorate_broker_properties
+from app.models.broker_property_model import get_brokers_for_clients
 
 def build_clients_context(request):
     filters = extract_client_filters(request)
@@ -76,3 +78,27 @@ def pick_top_brokers_per_client(client, brokers_map, limit=3):
                 break
 
     return selected
+
+def get_client_matches_context(client):
+
+    # 1. Properties
+    properties = get_matching_properties(client)
+    properties = decorate_broker_properties(properties)
+
+    # 2. Brokers
+    area_clusters = client.get("area_clusters") or []
+    brokers = []
+
+    if area_clusters:
+        brokers_map = get_brokers_for_clients(area_clusters)
+
+        brokers = pick_top_brokers_per_client(
+            client,
+            brokers_map,
+            limit=5
+        )
+
+    return {
+        "properties": properties,
+        "brokers": brokers
+    }

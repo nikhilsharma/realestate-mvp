@@ -18,6 +18,7 @@ from app.services.clients_service import create_client_service, update_client_se
 from app.services.validation import ValidationError
 from app.services.clients_service import enrich_clients_with_brokers
 from app.models.broker_property_model import get_brokers_for_clients
+from app.services.clients_service import get_client_matches_context
 
 def register_routes(app):
 
@@ -186,13 +187,13 @@ def register_routes(app):
         if not client:
             return "Client not found"
 
-        properties = get_matching_properties(client)
-        properties = decorate_broker_properties(properties)
+        context = get_client_matches_context(client)
 
         return render_template(
             "client_matches.html",
             client=client,
-            properties=properties
+            properties=context["properties"],
+            brokers=context["brokers"]
         )
 
     @app.route("/edit-property/<int:property_id>", methods=["GET", "POST"])
