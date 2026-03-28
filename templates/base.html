@@ -58,6 +58,11 @@ class="btn btn-sm {% if request.path.startswith('/clients') %}btn-light text-dar
 Clients
 </a>
 
+<a href="/brokers"
+class="btn btn-sm {% if request.path.startswith('/brokers') %}btn-light text-dark{% else %}btn-outline-light{% endif %}">
+Brokers
+</a>
+
 <a href="/logout"
 class="btn btn-sm btn-outline-light">
 Logout

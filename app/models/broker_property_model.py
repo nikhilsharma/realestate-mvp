@@ -315,3 +315,47 @@ def get_matching_properties_count(client, conn=None):
         cursor.close()
         if own_connection:
             conn.close()
+
+def get_brokers_for_clients(area_clusters_list):
+    """
+    area_clusters_list: list of all unique area clusters across all clients on the page
+    Returns: dict of {area_cluster: [brokers]}
+    """
+    if not area_clusters_list:
+        return {}
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT 
+            broker_name,
+            broker_contact,
+            area_cluster,
+            COUNT(*) as listings
+        FROM broker_properties
+        WHERE broker_name IS NOT NULL
+        AND broker_contact IS NOT NULL
+        AND area_cluster = ANY(%s)
+        GROUP BY broker_name, broker_contact, area_cluster
+        ORDER BY listings DESC
+    """, (area_clusters_list,))
+
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+
+    # Group by area_cluster
+    result = {}
+    for row in rows:
+        broker_name, broker_contact, area_cluster, listings = row
+        if area_cluster not in result:
+            result[area_cluster] = []
+        result[area_cluster].append({
+            "name": broker_name,
+            "phone": broker_contact,
+            "area": area_cluster,
+            "listings": listings
+        })
+
+    return result

@@ -16,6 +16,8 @@ from datetime import date
 from app.logger import logger
 from app.services.clients_service import create_client_service, update_client_service
 from app.services.validation import ValidationError
+from app.services.clients_service import enrich_clients_with_brokers
+from app.models.broker_property_model import get_brokers_for_clients
 
 def register_routes(app):
 
@@ -37,10 +39,12 @@ def register_routes(app):
             return redirect("/login")
 
         followups = get_followups_today()
+        logger.debug("FOLLOWUPS TODAY: %s", len(followups))
+        clients = enrich_clients_with_brokers(followups)
 
         return render_template(
             "clients.html",
-            clients=followups,
+            clients=clients,
             page_title="Followups Today",
             page=1,
             total_pages=1,
@@ -125,14 +129,16 @@ def register_routes(app):
             page = page,
             **filters)
         
+        clients = enrich_clients_with_brokers(data["items"])
+
         logger.debug("TOTAL ITEMS: %s", data["total"])
         logger.debug("PAGES: %s", data["pages"])
         logger.debug("ITEMS ON THIS PAGE: %s", len(data["items"]))
-        logger.debug("CLIENT NAMES: %s", [c["name"] for c in data["items"]])
+        logger.debug("CLIENT NAMES: %s", [c["name"] for c in clients])
         
         next_page_url = build_next_page_url(request, page + 1, filters)
         template_vars = dict(
-                        clients=data["items"],
+                        clients=clients,
                         page=data["page"],
                         total_pages=data["pages"],
                         next_page_url=next_page_url,
@@ -431,3 +437,23 @@ def register_routes(app):
             all_area_clusters=AREA_CLUSTERS
         )
 
+    @app.route("/brokers")
+    def brokers_lookup():
+        if not session.get("logged_in"):
+            return redirect("/login")
+
+        selected_areas = request.args.getlist("area[]")
+        brokers_by_area = {}
+
+        if selected_areas:
+            brokers_by_area = get_brokers_for_clients(selected_areas)
+            # sort each area's brokers by listings desc
+            for area in brokers_by_area:
+                brokers_by_area[area].sort(key=lambda b: b["listings"], reverse=True)
+
+        return render_template(
+            "brokers.html",
+            brokers_by_area=brokers_by_area,
+            selected_areas=selected_areas,
+            all_area_clusters=AREA_CLUSTERS
+        )
