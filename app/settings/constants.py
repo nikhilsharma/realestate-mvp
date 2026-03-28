@@ -23,6 +23,8 @@ BROKER_PROPERTY_TAGS = [
     "Ground Floor",
     "First Floor",
     "Second Floor",
+    "Third Floor",
+    "DDA Flats",
     "Builder Floor",
     "Independent Floor",
     "New Construction",
