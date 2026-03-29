@@ -1,0 +1,25 @@
+<div class="mb-3">
+    <label class="form-label">Deal Source</label>
+
+    {% set selected_val = selected if selected is not none else 1 %}
+
+    <div class="d-flex flex-wrap gap-2">
+
+        <input type="radio" class="btn-check" name="broker_chain_count" id="chain-1" value="1"
+               {% if selected_val == 1 %}checked{% endif %}>
+        <label class="btn btn-outline-warning btn-sm" for="chain-1">🟡 1 Broker</label>
+
+        <input type="radio" class="btn-check" name="broker_chain_count" id="chain-0" value="0"
+               {% if selected_val == 0 %}checked{% endif %}>
+        <label class="btn btn-outline-success btn-sm" for="chain-0">🟢 Direct</label>
+
+        <input type="radio" class="btn-check" name="broker_chain_count" id="chain-2" value="2"
+               {% if selected_val == 2 %}checked{% endif %}>
+        <label class="btn btn-outline-warning btn-sm" for="chain-2">🟠 2 Brokers</label>
+
+        <input type="radio" class="btn-check" name="broker_chain_count" id="chain-3" value="3"
+               {% if selected_val >= 3 %}checked{% endif %}>
+        <label class="btn btn-outline-danger btn-sm" for="chain-3">🔴 3+ Brokers</label>
+
+    </div>
+</div>

@@ -19,17 +19,24 @@
           <span class="text-muted fw-normal"> • {{ property.mode }} </span>
           {% endif %}
         </h6>
-        
-        {% if property.last_confirmed_at %} {% if property.freshness
-        == "fresh" %}
-        <span class="badge bg-success">Fresh</span>
+        <div class="d-flex gap-1">
+          <!-- 🔥 Deal Source Badge -->
+        {% if property.chain_label %}
+          <span class="badge bg-{{ property.chain_color }}">
+            {{ property.chain_label }}
+          </span>
+        {% endif %}  
+          {% if property.last_confirmed_at %} {% if property.freshness
+          == "fresh" %}
+          <span class="badge bg-success">Fresh</span>
 
-        {% elif property.freshness == "aging" %}
-        <span class="badge bg-warning text-dark">Aging</span>
+          {% elif property.freshness == "aging" %}
+          <span class="badge bg-warning text-dark">Aging</span>
 
-        {% elif property.freshness == "stale" %}
-        <span class="badge bg-danger">Stale</span>
-        {% endif %} {% endif %}
+          {% elif property.freshness == "stale" %}
+          <span class="badge bg-danger">Stale</span>
+          {% endif %} {% endif %}
+        </div>
       </div>
       </a>
 

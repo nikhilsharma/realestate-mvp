@@ -154,6 +154,11 @@ def init_db():
     ADD COLUMN IF NOT EXISTS area_clusters TEXT[];
     """)
 
+    cursor.execute("""
+    ALTER TABLE broker_properties
+    ADD COLUMN IF NOT EXISTS broker_chain_count INTEGER DEFAULT 1;
+    """)
+
     conn.commit()
     cursor.close()
     conn.close()

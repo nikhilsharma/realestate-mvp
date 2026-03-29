@@ -29,4 +29,20 @@ def decorate_broker_properties(properties):
             p["freshness"] = "stale"
             p["freshness_border"] = "border-danger"
 
+        # Broker Chain
+        chain = p.get("broker_chain_count", 0)
+
+        if chain == 0:
+            p["chain_label"] = "Direct"
+            p["chain_color"] = "success"
+        elif chain == 1:
+            p["chain_label"] = "1 Broker"
+            p["chain_color"] = "warning"
+        elif chain == 2:
+            p["chain_label"] = "2 Brokers"
+            p["chain_color"] = "warning"
+        else:
+            p["chain_label"] = "3+ Brokers"
+            p["chain_color"] = "danger"
+
     return properties

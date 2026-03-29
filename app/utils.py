@@ -60,6 +60,9 @@ def parse_broker_property_form(form):
     else:
         last_confirmed_at = date.today()
 
+    chain_raw = form.get("broker_chain_count")
+    broker_chain_count = int(chain_raw) if chain_raw else 0
+
     area_clusters = form.getlist("area_cluster[]")
     area_cluster = area_clusters[0] if area_clusters else None
 
@@ -84,7 +87,8 @@ def parse_broker_property_form(form):
         "tags": tags,
         "last_confirmed_at": last_confirmed_at,
         "latitude": float(form.get("latitude")) if form.get("latitude") else None,
-        "longitude": float(form.get("longitude")) if form.get("longitude") else None
+        "longitude": float(form.get("longitude")) if form.get("longitude") else None,
+        "broker_chain_count": broker_chain_count
     }
 
 def build_next_page_url(request, next_page, filters=None):

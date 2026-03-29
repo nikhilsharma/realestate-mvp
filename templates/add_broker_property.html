@@ -138,6 +138,10 @@
 
                         <div class="mt-3">
 
+                            <!-- 🔥 Deal Source FIRST -->
+                            {% set selected = None %}
+                            {% include "partials/_broker_chain.html" %}
+
                             <input name="broker_name" class="form-control mb-2" placeholder="Broker name">
 
                             <input name="broker_contact" class="form-control" inputmode="numeric" placeholder="Broker phone">

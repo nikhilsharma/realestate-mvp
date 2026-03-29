@@ -32,9 +32,10 @@ def create_broker_property(data):
             tags,
             last_confirmed_at,
             latitude,
-            longitude    
+            longitude,
+            broker_chain_count    
         )
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
     """, (
         data["area_cluster"],
@@ -53,7 +54,8 @@ def create_broker_property(data):
         data.get("tags", []),
         data["last_confirmed_at"],
         data.get("latitude"),
-        data.get("longitude")
+        data.get("longitude"),
+        data.get("broker_chain_count", 0)
     ))
 
     new_id = cursor.fetchone()[0]
@@ -204,7 +206,8 @@ def update_broker_property(property_id, data):
         tags=%s,
         last_confirmed_at=%s,
         latitude=%s,
-        longitude=%s
+        longitude=%s,
+        broker_chain_count=%s
     WHERE id=%s
     """, (
         data["area_cluster"],
@@ -223,6 +226,7 @@ def update_broker_property(property_id, data):
         data["last_confirmed_at"],
         data.get("latitude"),
         data.get("longitude"),
+        data.get("broker_chain_count", 0),
         property_id
     ))
 
