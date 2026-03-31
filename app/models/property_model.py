@@ -3,7 +3,7 @@ from app.services.matching import build_location_filter
 from app.services.client_rules import map_client_requirement_to_property_mode
 from app.services.query_builder import build_in_filter
 from app.services.property_query import _build_property_query
-from app.settings.constants import BUDGET_UPPER_MULTIPLIER, BUDGET_LOWER_MULTIPLIER
+from app.settings.constants import BUDGET_UPPER_MULTIPLIER, BUDGET_LOWER_MULTIPLIER, BROKER_PROPERTY_ORDER_BY
 from app.logger import logger
 
 def create_property(data):
@@ -125,20 +125,27 @@ def get_matching_properties(client):
         query += " AND budget BETWEEN %s AND %s"
         params.extend([lower, upper])
 
-    query += " ORDER BY created_at DESC"
-
+    query += BROKER_PROPERTY_ORDER_BY
     cursor.execute(query, tuple(params))
     rows = cursor.fetchall()
 
     columns = [desc[0] for desc in cursor.description]
     results = [dict(zip(columns, row)) for row in rows]
-
     cursor.close()
     conn.close()
     logger.debug("FINAL QUERY: %s", query)
     logger.debug("PARAMS: %s", params)
 
     return results
+
+def sort_by_deal_quality(properties):
+    return sorted(
+        properties,
+        key=lambda p: (
+            p.get("broker_chain_count") or 1,  # lower is better
+            -p.get("created_at").timestamp() if p.get("created_at") else 0
+        )
+    )
 
 def get_property_by_id(property_id):
     conn = get_db_connection()

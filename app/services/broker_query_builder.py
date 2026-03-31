@@ -1,6 +1,7 @@
 from app.settings.constants import (
     FRESH_DAYS_THRESHOLD,
-    AGING_DAYS_THRESHOLD
+    AGING_DAYS_THRESHOLD,
+    BROKER_PROPERTY_ORDER_BY
 )
 from app.services.location_utils import normalize_location
 
@@ -95,6 +96,6 @@ def _build_broker_query(
     if conditions:
         query += " WHERE " + " AND ".join(conditions)
 
-    query += " ORDER BY last_confirmed_at DESC NULLS LAST, created_at DESC"
+    query += BROKER_PROPERTY_ORDER_BY
 
     return query, params

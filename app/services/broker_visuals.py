@@ -33,7 +33,7 @@ def decorate_broker_properties(properties):
         chain = p.get("broker_chain_count", 0)
 
         if chain == 0:
-            p["chain_label"] = "Direct"
+            p["chain_label"] = "Direct ⭐"
             p["chain_color"] = "success"
         elif chain == 1:
             p["chain_label"] = "1 Broker"

@@ -333,7 +333,7 @@ def get_brokers_for_clients(area_clusters_list):
 
     cursor.execute("""
         SELECT 
-            broker_name,
+            MIN(broker_name) as broker_name,
             broker_contact,
             area_cluster,
             COUNT(*) as listings
@@ -341,7 +341,7 @@ def get_brokers_for_clients(area_clusters_list):
         WHERE broker_name IS NOT NULL
         AND broker_contact IS NOT NULL
         AND area_cluster = ANY(%s)
-        GROUP BY broker_name, broker_contact, area_cluster
+        GROUP BY broker_contact, area_cluster
         ORDER BY listings DESC
     """, (area_clusters_list,))
 

@@ -77,3 +77,9 @@ CONFIGURATIONS = [
     "PG",
     "Upper Ground"
 ]
+
+# How broker_properties are sorted:
+# Direct Deals First
+# Then last_confirmed_at
+# Finally with created_at
+BROKER_PROPERTY_ORDER_BY = " ORDER BY COALESCE(broker_chain_count, 1) ASC, last_confirmed_at DESC NULLS LAST, created_at DESC"
