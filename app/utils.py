@@ -104,3 +104,25 @@ def build_next_page_url(request, next_page, filters=None):
     logger.debug("PARAMS>> %s ", params)
     params["page"] = next_page       # just bump the page
     return f"{request.path}?{urlencode(params, doseq=True)}"
+
+def format_inr(value):
+    if value is None:
+        return "N/A"
+    try:
+        value = int(value)
+        s = str(value)
+        if len(s) <= 3:
+            return f"₹ {s}"
+        # Indian format: last 3 digits, then groups of 2
+        last3 = s[-3:]
+        rest = s[:-3]
+        groups = []
+        while len(rest) > 2:
+            groups.append(rest[-2:])
+            rest = rest[:-2]
+        if rest:
+            groups.append(rest)
+        groups.reverse()
+        return "₹ " + ",".join(groups) + "," + last3
+    except:
+        return f"₹ {value}"

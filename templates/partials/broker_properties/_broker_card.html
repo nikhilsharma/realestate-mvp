@@ -7,8 +7,8 @@
           class="text-decoration-none text-dark">
       <!-- Header -->
       <div class="d-flex justify-content-between align-items-center mb-2">
-        <h6 class="fw-bold mb-0">
-          ₹ {{ property.budget }} {% if property.configuration %}
+        <h6 class="fw-bold mb-0"> 
+          {{ property.budget | inr }} {% if property.configuration %}
           <span class="text-muted fw-normal">
             • {{ property.configuration }}
           </span>

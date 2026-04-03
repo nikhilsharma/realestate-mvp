@@ -46,7 +46,7 @@
 
       <!-- Budget -->
       <div class="fw-semibold mb-2">
-        ₹ {{ "{:,}".format(client.budget) }}
+        {{ client.budget | inr }}
       </div>
 
       <hr class="my-2">

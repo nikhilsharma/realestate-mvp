@@ -38,7 +38,7 @@ def apply_default_temperature_filter(values):
 def extract_broker_filters(request):
     tags = request.args.getlist("tags")
     return {
-        "area_clusters": request.args.getlist("area_cluster"),
+        "area_clusters": request.args.getlist("area_cluster[]"),
         "configurations": request.args.getlist("configuration"),
         "modes": request.args.getlist("mode"),
         "freshness": request.args.getlist("freshness") or ["fresh", "aging"],

@@ -290,6 +290,7 @@ def register_routes(app):
             return redirect("/login")
 
         filters = extract_broker_filters(request)
+        logger.debug("EXTRACTED FILTERS: %s", filters)
         page = request.args.get("page", 1, type=int)
         next_page_url = build_next_page_url(request, page + 1, filters)
 

@@ -1,6 +1,6 @@
 <!-- Area Cluster -->
 {% set name = "area_cluster" %}
-{% set selected = request.args.getlist("area_cluster") %}
+{% set selected = request.args.getlist("area_cluster[]") %}
 {% set mode = "multi" %}
 
 {% include "partials/_area_cluster.html" %}

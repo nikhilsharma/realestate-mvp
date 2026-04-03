@@ -15,6 +15,9 @@ def create_app():
 
     setup_logger(log_level=app.config.get("LOG_LEVEL"))
 
+    from app.utils import format_inr
+    app.jinja_env.filters["inr"] = format_inr # setup INR Formatter
+
     register_routes(app)
     init_db()
 
